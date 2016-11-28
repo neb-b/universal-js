@@ -6,7 +6,7 @@ import { StyleSheet, css } from 'aphrodite'
 const App = ({ children }) => (
   <div className={css(styles.root)}>
     <Helmet title='Vibrate' titleTemplate='%s' />
-    <h1 className={css(styles.title)}>React Production Starter</h1>
+    <h1 className={css(styles.title)}>Vibrate</h1>
     <Nav />
     {children}
     <footer className={css(styles.footer)}>
