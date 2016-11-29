@@ -26,6 +26,7 @@ import { configureStore } from '../common/store'
 import reducer from '../common/createReducer'
 import createRoutes from '../common/routes/root'
 import Routing from './routes'
+import db from './db.init';
 
 export const createServer = (config) => {
   const __PROD__ = config.nodeEnv === 'production'
@@ -198,6 +199,10 @@ export const createServer = (config) => {
 
 export const startServer = (serverConfig) => {
   const config =  {...DefaultServerConfig, ...serverConfig}
+  
+  // Mongo instance
+  db(config.mongoUrl);
+
   const server = createServer(config)
   server.listen(config.port, (err) => {
     if (config.nodeEnv === 'production' || config.nodeEnv === 'test') {
@@ -207,7 +212,7 @@ export const startServer = (serverConfig) => {
       startDev(config.port, err)
     }
   })
-}
+} 
 
 if (require.main === module) {
   throng({
