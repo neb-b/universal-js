@@ -9,6 +9,7 @@ const AccountPage = ({ createEvent }) => {
   return (
     <div className={css(styles.root)}>
       <Helmet title='Account' />
+      <h2 className={css(styles.title)}>Account Dashboard</h2>
       <Account />
       <button onClick={() => createEvent('hello world')} className={css(styles.button)}>Create Event</button>
     </div>

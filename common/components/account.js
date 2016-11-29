@@ -3,7 +3,6 @@ import { StyleSheet, css } from 'aphrodite'
 
 const Account = (props) => (
   <div>
-    <h2 className={css(styles.header)}>Account dashboard</h2>
     <p className={css(styles.lead)}>
       This is where all venue account actions happen.
     </p>
@@ -11,11 +10,6 @@ const Account = (props) => (
 )
 
 const styles = StyleSheet.create({
-  header: {
-    fontSize: 28,
-    lineHeight: '1.2',
-    margin: '0 0 1.5rem'
-  },
   lead: {
     fontSize: 18,
     lineHeight: '1.5',

@@ -17,7 +17,8 @@ const EventsPage = ({ events }) => {
   console.log('events', events)
   return (
     <div className={css(styles.root)}>
-      <Helmet title='Posts' />
+      <Helmet title='Events' />
+      <h2 className={css(styles.title)}>Events</h2>
       {events.loading &&
         <div>
           <h2 className={css(styles.title)}>Loading....</h2>
