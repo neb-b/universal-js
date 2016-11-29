@@ -17,7 +17,7 @@ VenueController.prototype.searchVenue = function searchVenue(req, res, next) {
 };
 
 VenueController.prototype.getProfile = function getProfile(req, res, next) {
-  return Promise.resolve(this.Venue.find())
+  return Promise.resolve(this.Venue.findById(req.params.id))
     .then(venue => res.send(venue))
     .catch(err => next(Boom.notFound('No venue found')));
 };
@@ -36,10 +36,6 @@ VenueController.prototype.createVenue = function createVenue(req, res, next) {
       console.log(err);
       next(Boom.wrap(err))
     });
-};
-
-VenueController.prototype.login = function login(req, res, next) {
-  // body...
 };
 
 VenueController.prototype.updateVenue = function updateVenue(req, res, next) {
@@ -61,5 +57,17 @@ VenueController.prototype.validateInput = Promise.method(function validateInput(
 
   return { name };
 });
+
+VenueController.prototype.loginOrRegisterVenue = function loginOrRegisterVenue(req, res, next) {
+  // body...
+};
+
+VenueController.prototype.loginCallback = function(req, res, next) {
+  // body...
+};
+
+VenueController.prototype.protected = function(req, res, next) {
+  return res.send('TOP SECRET');
+};
 
 export default VenueController;

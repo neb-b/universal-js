@@ -36,3 +36,4 @@ assets.json
 public/assets
 .nyc_output
 coverage
+.env
