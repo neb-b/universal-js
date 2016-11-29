@@ -1,5 +1,8 @@
 import { Router } from 'express';
+import { ensureLoggedIn } from 'connect-ensure-login';
+
 import BoomHandler from './middlewares/boom.middleware';
+import passport from './auth.init.js';
 
 import VenueController from './controllers/venues.controller';
 import EventController from './controllers/events.controller';
@@ -23,8 +26,17 @@ const Routing = () => {
   router.get('/events', Controllers.Events.searchEvents.bind(Controllers.Events));
   router.post('/events', Controllers.Events.createEvent.bind(Controllers.Events));
 
+  // Venue login/register test routes
+  // Right now a `GET` to test in browser easier
+  router.get('/venues/login', passport.authenticate('facebook'));
+
+  router.get('/venues/login/callback',
+    passport.authenticate('facebook', { failureRedirect: '/' }),
+    (req, res) => res.redirect('/'));
+
+  router.get('/venues/protected', ensureLoggedIn(), Controllers.Venues.protected.bind(Controllers.Venues));
+
   // Venue Routes
-  // TODO (sprada): Authentication? Middleware?
   router.get('/venues/:id', Controllers.Venues.getVenue.bind(Controllers.Venues));
   router.get('/venues/:id/profile', Controllers.Venues.getProfile.bind(Controllers.Venues));
   router.get('/venues', Controllers.Venues.searchVenue.bind(Controllers.Venues));

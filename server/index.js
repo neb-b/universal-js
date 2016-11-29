@@ -26,7 +26,9 @@ import { configureStore } from '../common/store'
 import reducer from '../common/createReducer'
 import createRoutes from '../common/routes/root'
 import Routing from './routes'
+
 import db from './db.init';
+import passport from './auth.init';
 
 export const createServer = (config) => {
   const __PROD__ = config.nodeEnv === 'production'
@@ -37,6 +39,8 @@ export const createServer = (config) => {
   app.disable('x-powered-by')
   app.use(bodyParser.json())
   app.use(bodyParser.urlencoded({ extended: true }))
+  app.use(require('cookie-parser')());
+  app.use(require('express-session')({ secret: 'keyboard', resave: true, saveUninitialized: true }));
 
   if (__PROD__ || __TEST__) {
     app.use(morgan('combined'))
@@ -59,7 +63,8 @@ export const createServer = (config) => {
   }
 
   app.use(express.static('public'))
-
+  app.use(passport.initialize());
+  app.use(passport.session());
   // Api routing
   app.use('/api', Routing())
 
