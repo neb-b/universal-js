@@ -7,10 +7,10 @@ export default function createRoutes (store) {
     getComponents (location, cb) {
       require.ensure([
         './events.connected',
-        './reducer'
+        '../../redux/reducers/events'
       ], (require) => {
         let EventsPage = require('./events.connected').default
-        let events = require('./reducer').default
+        let events = require('../../redux/reducers/events').default
         injectAsyncReducer(store, 'events', events)
         cb(null, EventsPage)
       })

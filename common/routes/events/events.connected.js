@@ -1,30 +1,32 @@
 import { provideHooks } from 'redial'
 import React from 'react'
-import { loadPosts } from './actions'
+import { loadEvents } from '../../redux/action-creators/load-events'
 import { connect } from 'react-redux'
 import { StyleSheet, css } from 'aphrodite'
 import Helmet from 'react-helmet'
-import { selectPosts } from './reducer'
 
 const redial = {
-  fetch: ({ dispatch }) => dispatch(loadPosts())
+  fetch: ({ dispatch }) => dispatch(loadEvents())
 }
 
-const mapStateToProps = state => ({
-  events: selectPosts(state)
+const mapStateToProps = (state) => ({
+  events: state.events
 })
 
-const PostListPage = ({ events }) => (
-  <div className={css(styles.root)}>
-    <Helmet title='Posts' />
-    {events.isLoading &&
-      <div>
-        <h2 className={css(styles.title)}>Loading....</h2>
-      </div>}
-    {events.data &&
-      <span>{events.data.test}</span>}
-  </div>
-)
+const PostListPage = ({ events }) => {
+  console.log('events', events)
+  return (
+    <div className={css(styles.root)}>
+      <Helmet title='Posts' />
+      {events.loading &&
+        <div>
+          <h2 className={css(styles.title)}>Loading....</h2>
+        </div>}
+      {events.data &&
+        <span>events</span>}
+    </div>
+  )
+}
 
 const styles = StyleSheet.create({
   root: {
