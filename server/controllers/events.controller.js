@@ -9,17 +9,17 @@ function EventController(opts = {}) {
   this.Event = opts.Event || {};
 }
 
-EventController.prototype.getEvents = function getEvents(req, res, next) {
-  // Queries are not promises.
-  return Promise.resolve(this.Event.find())
-    .then(events => res.send(events))
-    .catch(() => next(Boom.notFound('No events found')));
-};
-
 EventController.prototype.getEvent = function getEvent(req, res, next) {
   return Promise.resolve(this.Event.findById(req.params.id))
     .then(event => res.send(event))
     .catch(() => next(Boom.notFound('Event not found')));
+};
+
+EventController.prototype.searchEvents = function getEvents(req, res, next) {
+  // Queries are not promises.
+  return Promise.resolve(this.Event.find())
+    .then(events => res.send(events))
+    .catch(() => next(Boom.notFound('No events found')));
 };
 
 EventController.prototype.createEvent = function createEvent(req, res, next) {

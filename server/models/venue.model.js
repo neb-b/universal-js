@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 
 const VenueSchema = new Schema({
   name: { type: 'String', required: true },
-  fb_id: { type: 'String', required: true },
+  fb_id: { type: 'String', required: false },
   dateAdded: { type: 'Date', default: Date.now, required: true },
 });
 

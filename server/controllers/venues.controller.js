@@ -9,7 +9,7 @@ function VenueController(opts = {}) {
   this.Venue = opts.Venue || {};
 }
 
-VenueController.prototype.getVenues = function getVenues(req, res, next) {
+VenueController.prototype.searchVenue = function searchVenue(req, res, next) {
   // Queries are not promises.
   return Promise.resolve(this.Venue.find())
     .then(venues => res.send(venues))
