@@ -10,10 +10,9 @@ export function loadEvents () {
     dispatch({ type: GET_EVENTS_REQUEST })
     return axios.get(`${ROOT_URL}/events`)
       .then(res => {
-        dispatch(createAction(GET_EVENTS_SUCCESS, res))
+        dispatch(createAction(GET_EVENTS_SUCCESS, res.data))
       })
       .catch(error => {
-        console.error(`Error in reducer that handles ${GET_EVENTS_SUCCESS}: `, error)
         dispatch(createAction(GET_EVENTS_ERROR, error))
       })
   }

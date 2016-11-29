@@ -13,7 +13,7 @@ const mapStateToProps = (state) => ({
   events: state.events
 })
 
-const PostListPage = ({ events }) => {
+const EventsPage = ({ events }) => {
   console.log('events', events)
   return (
     <div className={css(styles.root)}>
@@ -23,7 +23,12 @@ const PostListPage = ({ events }) => {
           <h2 className={css(styles.title)}>Loading....</h2>
         </div>}
       {events.data &&
-        <span>events</span>}
+        events.data.map((event) => (
+          <div>
+            <h3>{event.name}</h3>
+            <p>Created at: {event.dateAdded}</p>
+          </div>
+        ))}
     </div>
   )
 }
@@ -39,4 +44,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default provideHooks(redial)(connect(mapStateToProps)(PostListPage))
+export default provideHooks(redial)(connect(mapStateToProps)(EventsPage))

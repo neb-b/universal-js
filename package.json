@@ -58,6 +58,8 @@
     "react-router": "^2.0.0",
     "redial": "^0.4.1",
     "redux": "^3.3.1",
+    "redux-logger": "^2.7.4",
+    "redux-promise": "^0.5.3",
     "redux-thunk": "^2.1.0",
     "source-map-support": "^0.4.0",
     "standard": "^8.0.0",

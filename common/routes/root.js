@@ -12,6 +12,7 @@ export default function createRoutes (store) {
       require.ensure([], (require) => {
         cb(null, [
           require('./events').default(store), // no need to modify store, no reducer
+          require('./account').default,
           require('./not-found').default
         ])
       })
