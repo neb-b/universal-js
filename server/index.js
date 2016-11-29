@@ -27,6 +27,9 @@ import reducer from '../common/createReducer'
 import createRoutes from '../common/routes/root'
 import Routing from './routes'
 
+import db from './db.init';
+import passport from './auth.init';
+
 export const createServer = (config) => {
   const __PROD__ = config.nodeEnv === 'production'
   const __TEST__ = config.nodeEnv === 'test'
@@ -36,6 +39,8 @@ export const createServer = (config) => {
   app.disable('x-powered-by')
   app.use(bodyParser.json())
   app.use(bodyParser.urlencoded({ extended: true }))
+  app.use(require('cookie-parser')());
+  app.use(require('express-session')({ secret: 'keyboard', resave: true, saveUninitialized: true }));
 
   if (__PROD__ || __TEST__) {
     app.use(morgan('combined'))
@@ -58,7 +63,8 @@ export const createServer = (config) => {
   }
 
   app.use(express.static('public'))
-
+  app.use(passport.initialize());
+  app.use(passport.session());
   // Api routing
   app.use('/api', Routing())
 
@@ -198,6 +204,10 @@ export const createServer = (config) => {
 
 export const startServer = (serverConfig) => {
   const config =  {...DefaultServerConfig, ...serverConfig}
+  
+  // Mongo instance
+  db(config.mongoUrl);
+
   const server = createServer(config)
   server.listen(config.port, (err) => {
     if (config.nodeEnv === 'production' || config.nodeEnv === 'test') {
@@ -207,7 +217,7 @@ export const startServer = (serverConfig) => {
       startDev(config.port, err)
     }
   })
-}
+} 
 
 if (require.main === module) {
   throng({
