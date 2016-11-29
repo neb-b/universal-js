@@ -10,7 +10,7 @@ const AccountPage = ({ createEvent }) => {
     <div className={css(styles.root)}>
       <Helmet title='Account' />
       <Account />
-      <button onClick={() => createEvent('sean')} className={css(styles.button)}>Create Event</button>
+      <button onClick={() => createEvent('hello world')} className={css(styles.button)}>Create Event</button>
     </div>
   )
 }
