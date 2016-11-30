@@ -1,17 +1,19 @@
 import React from 'react'
 import Helmet from 'react-helmet'
-import { connect } from 'react-redux'
+import { Link } from 'react-router'
 import { StyleSheet, css } from 'aphrodite'
 import Account from '../../components/account'
-import { createEvent } from '../../redux/action-creators/create-event'
 
-const AccountPage = ({ createEvent }) => {
+const AccountPage = () => {
   return (
     <div className={css(styles.root)}>
       <Helmet title='Account' />
-      <h2 className={css(styles.title)}>Account Dashboard</h2>
+      <h2 className={css(styles.title)}>Account Info</h2>
       <Account />
-      <button onClick={() => createEvent('hello world')} className={css(styles.button)}>Create Event</button>
+      <Link to='account/dashboard'>
+        <div className={css(styles.button)}>View Event Dashboard</div>
+      </Link>
+      <p>show this link only if they are venues</p>
     </div>
   )
 }
@@ -26,11 +28,13 @@ const styles = StyleSheet.create({
     color: '#b7b7b7'
   },
   button: {
+    width: '50%',
     padding: 10,
     borderRadius: 5,
+    textAlign: 'center',
     backgroundColor: '#242424',
     color: '#fff'
   }
 })
 
-export default connect(null, { createEvent })(AccountPage)
+export default AccountPage
