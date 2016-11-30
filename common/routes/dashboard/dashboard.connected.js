@@ -19,6 +19,7 @@ const DashboardPage = ({ createEvent, dashboard }) => {
   return (
     <div className={css(styles.root)}>
       <Helmet title='Account Dashboard' />
+      <h2 className={css(styles.title)}>Account Dashboard</h2>
       <Dashboard {...dashboard} createEvent={createEvent} />
     </div>
   )
@@ -27,6 +28,11 @@ const DashboardPage = ({ createEvent, dashboard }) => {
 const styles = StyleSheet.create({
   root: {
     maxWidth: 500
+  },
+  title: {
+    fontSize: 28,
+    margin: '0 auto 1.5rem',
+    color: '#b7b7b7'
   }
 })
 
