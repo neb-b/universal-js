@@ -5,20 +5,20 @@ import passport from 'passport';
 import { Strategy } from 'passport-facebook';
 import Boom from 'boom';
 
-import VenueModel from './models/venue.model';
+import UserModel from './models/user.model';
 
 const loginCallback = (accessToken, refreshToken, profile, done) => {
   const { displayName, id } = profile;
 
-  return Promise.resolve(VenueModel.findOne({ fb_id: id }))
-    .then(venue => {
-      if(!venue){
-        return VenueModel.createAndSave({ fb_id: id, name: displayName });
+  return Promise.resolve(UserModel.findOne({ fb_id: id }))
+    .then(user => {
+      if(!user){
+        return UserModel.createAndSave({ fb_id: id, name: displayName });
       }
 
-      return venue;
+      return user;
     })
-    .then(venue => done(null, venue))
+    .then(user => done(null, user))
     .catch(err => {
       console.log(err);
     })
@@ -27,19 +27,19 @@ const loginCallback = (accessToken, refreshToken, profile, done) => {
 passport.use(new Strategy({
     clientID: process.env.APP_ID,
     clientSecret: process.env.APP_SECRET,
-    callbackURL: 'http://localhost:1337/api/venues/login/callback'
+    callbackURL: 'http://localhost:1337/api/users/login/callback'
   }, loginCallback));
 
-passport.serializeUser(function(venue, done) {
-  console.log('serializeUser: ' + venue._id);
-  done(null, venue._id);
+passport.serializeUser(function(user, done) {
+  console.log('serializeUser: ' + user._id);
+  done(null, user._id);
 });
 
 passport.deserializeUser(function(id, done) {
   console.log('\n\nDeserializer', id);
-  VenueModel.findById(id, function(err, venue){
-    console.log(venue);
-      if(!err) done(null, venue);
+  UserModel.findById(id, function(err, user){
+    console.log(user);
+      if(!err) done(null, user);
       else done(err, null);
     });
 });
