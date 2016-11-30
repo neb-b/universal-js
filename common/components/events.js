@@ -14,7 +14,7 @@ const Events = (props) => {
         </div>}
       {data &&
         data.map((event) => (
-          <div>
+          <div key={event.dateAdded}>
             <h3>{event.name}</h3>
             <p>Created at: {event.dateAdded}</p>
           </div>
