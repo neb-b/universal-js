@@ -58,6 +58,7 @@
     "react-router": "^2.0.0",
     "redial": "^0.4.1",
     "redux": "^3.3.1",
+    "redux-form": "^6.2.0",
     "redux-logger": "^2.7.4",
     "redux-promise": "^0.5.3",
     "redux-thunk": "^2.1.0",
