@@ -4,23 +4,23 @@ import { connect } from 'react-redux'
 import { StyleSheet, css } from 'aphrodite'
 import Helmet from 'react-helmet'
 import { createEvent } from '../../redux/action-creators/create-event'
-import { loadDashboard } from '../../redux/action-creators/dashboard'
-import Dashboard from '../../components/dashboard'
+import { loadFbEvent } from '../../redux/action-creators/load-fb-event'
+import NewEvent from '../../components/dashboard/new-event.connected'
 
 const redial = {
-  fetch: ({ dispatch }) => dispatch(loadDashboard())
+  fetch: ({ dispatch }) => dispatch(loadFbEvent())
 }
 
 const mapStateToProps = (state) => ({
   dashboard: state.dashboard
 })
 
-const DashboardPage = ({ dashboard }) => {
+const NewEventPage = ({ createEvent }) => {
   return (
     <div className={css(styles.root)}>
-      <Helmet title='Account Dashboard' />
-      <h2 className={css(styles.title)}>Account Dashboard</h2>
-      <Dashboard {...dashboard} createEvent={createEvent} />
+      <Helmet title='New Event' />
+      <h2 className={css(styles.title)}>New Event</h2>
+      <NewEvent createEvent={createEvent} />
     </div>
   )
 }
@@ -36,4 +36,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default provideHooks(redial)(connect(mapStateToProps)(DashboardPage))
+export default provideHooks(redial)(connect(mapStateToProps, { createEvent })(NewEventPage))

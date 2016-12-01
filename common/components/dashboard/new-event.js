@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router'
 import { Field } from 'redux-form'
 import { css, StyleSheet } from 'aphrodite'
 
@@ -11,10 +12,16 @@ const NewEvent = ({ handleSubmit }) => (
     <button className={css(styles.button)}>
       Create Event
     </button>
+    <div className={css(styles.noLink)}>
+      <Link to='/account/dashboard'>Cancel</Link>
+    </div>
   </form>
 )
 
 const styles = StyleSheet.create({
+  noLink: {
+    textDecoration: 'none'
+  },
   inputWrapper: {
     paddingTop: 20,
     paddingBottom: 20
