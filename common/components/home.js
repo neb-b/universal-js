@@ -3,15 +3,9 @@ import { StyleSheet, css } from 'aphrodite'
 
 const Home = (props) => (
   <div>
-
-    <h2 className={css(styles.header)}>About</h2>
+    <h2 className={css(styles.header)}>Home</h2>
     <p className={css(styles.lead)}>
-      This is an example react application (master-detail feed) with isomorphic rendering, async react-router routes, async redux reducers, async data fetching, and code-splitting.
-    </p>
-    <h2 className={css(styles.header)}>Motivation</h2>
-    <p className={css(styles.lead)}>
-      The file size of isomorphic React apps can quickly get out of hand. Many isomorphic starter kits look awesome to begin with but yield a several megabyte javascript
-      file for the client to download. This project aims to demonstrate some possible solutions.
+      This is the home page
     </p>
   </div>
 )
@@ -33,26 +27,6 @@ const styles = StyleSheet.create({
     lineHeight: '1.5',
     margin: '0 0 1.5rem',
     color: '#555'
-  },
-  list: {
-    fontSize: '1rem',
-    listStyle: 'none',
-    padding: 0
-  },
-  link: {
-    display: 'block',
-    fontSize: '1.25rem',
-    margin: '0 0 .5rem',
-    lineHeight: '1.5',
-    fontWeight: 'bold',
-    color: '#08c',
-    opacity: 1,
-    transition: '.2s opacity ease',
-    textDecoration: 'none',
-    ':hover': {
-      opacity: 0.5,
-      textDecoration: 'none'
-    }
   }
 })
 

@@ -35,7 +35,7 @@ const Routing = () => {
 
   router.get('/users/login/callback',
     passport.authenticate('facebook', { failureRedirect: '/' }),
-    (req, res) => res.redirect('/'));
+    (req, res) => res.cookie('loggedin', true).cookie('user', 'User').redirect('/'));
 
   router.get('/users/protected', ensureLoggedIn(), Controllers.Users.protected.bind(Controllers.Users));
 

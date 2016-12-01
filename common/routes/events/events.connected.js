@@ -1,9 +1,10 @@
 import { provideHooks } from 'redial'
 import React from 'react'
-import { loadEvents } from '../../redux/action-creators/load-events'
 import { connect } from 'react-redux'
 import { StyleSheet, css } from 'aphrodite'
 import Helmet from 'react-helmet'
+import { loadEvents } from '../../redux/action-creators/load-events'
+import Events from '../../components/events'
 
 const redial = {
   fetch: ({ dispatch }) => dispatch(loadEvents())
@@ -14,22 +15,11 @@ const mapStateToProps = (state) => ({
 })
 
 const EventsPage = ({ events }) => {
-  console.log('events', events)
   return (
     <div className={css(styles.root)}>
       <Helmet title='Events' />
       <h2 className={css(styles.title)}>Events</h2>
-      {events.loading &&
-        <div>
-          <h2 className={css(styles.title)}>Loading....</h2>
-        </div>}
-      {events.data &&
-        events.data.map((event) => (
-          <div>
-            <h3>{event.name}</h3>
-            <p>Created at: {event.dateAdded}</p>
-          </div>
-        ))}
+      <Events {...events} />
     </div>
   )
 }

@@ -1,6 +1,7 @@
 import React from 'react'
 import Helmet from 'react-helmet'
-import Nav from './Nav'
+import Nav from './global/nav'
+import Footer from './global/footer'
 import { StyleSheet, css } from 'aphrodite'
 
 const App = ({ children }) => (
@@ -9,9 +10,7 @@ const App = ({ children }) => (
     <h1 className={css(styles.title)}>Vibrate</h1>
     <Nav />
     {children}
-    <footer className={css(styles.footer)}>
-      Footer text
-    </footer>
+    <Footer />
   </div>
 )
 
@@ -27,11 +26,6 @@ const styles = StyleSheet.create({
     maxWidth: 300,
     fontWeight: 'bold',
     fontSize: 56
-  },
-  footer: {
-    margin: '4rem auto',
-    textAlign: 'center',
-    color: '#b7b7b7'
   }
 })
 

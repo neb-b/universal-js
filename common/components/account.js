@@ -1,11 +1,16 @@
 import React from 'react'
 import { StyleSheet, css } from 'aphrodite'
+import { Link } from 'react-router'
 
 const Account = (props) => (
   <div>
     <p className={css(styles.lead)}>
       This is where all venue account actions happen.
     </p>
+    <Link to='account/dashboard'>
+      <div className={css(styles.button)}>View Event Dashboard</div>
+    </Link>
+    <p>show this link only if they are venues</p>
   </div>
 )
 
@@ -16,31 +21,13 @@ const styles = StyleSheet.create({
     margin: '0 0 1.5rem',
     color: '#555'
   },
-  body: {
-    fontSize: '1rem',
-    lineHeight: '1.5',
-    margin: '0 0 1.5rem',
-    color: '#555'
-  },
-  list: {
-    fontSize: '1rem',
-    listStyle: 'none',
-    padding: 0
-  },
-  link: {
-    display: 'block',
-    fontSize: '1.25rem',
-    margin: '0 0 .5rem',
-    lineHeight: '1.5',
-    fontWeight: 'bold',
-    color: '#08c',
-    opacity: 1,
-    transition: '.2s opacity ease',
-    textDecoration: 'none',
-    ':hover': {
-      opacity: 0.5,
-      textDecoration: 'none'
-    }
+  button: {
+    width: '50%',
+    padding: 10,
+    borderRadius: 5,
+    textAlign: 'center',
+    backgroundColor: '#242424',
+    color: '#fff'
   }
 })
 

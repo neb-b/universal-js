@@ -14,6 +14,7 @@ export default function createRoutes (store) {
           require('./events').default(store), // no need to modify store, no reducer
           require('./account').default,
           require('./dashboard').default(store),
+          require('./login').default,
           require('./not-found').default
         ])
       })
