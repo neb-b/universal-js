@@ -30,14 +30,14 @@ const Nav = () => {
       </Link>
       {
         loggedIn
-        ? <a className={css(styles.link, styles.activeLink)}>Hello {name}</a>
-        : <a
-          href='api/users/login'
-          className={css(styles.link)}>
-          Login
-          </a>
+        ? <span className={css(styles.activeLink, styles.greeting)}>Hello {name}</span>
+        : <Link
+          to='/login'
+          className={css(styles.link)}
+          activeClassName={css(styles.link, styles.activeLink)}>
+            Login
+          </Link>
       }
-
     </div>
   )
 }
@@ -57,6 +57,9 @@ const styles = StyleSheet.create({
   },
   activeLink: {
     color: '#000'
+  },
+  greeting: {
+    fontWeight: 'bold'
   },
   fakeButton: {
     border: 'none',
