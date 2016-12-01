@@ -31,12 +31,10 @@ passport.use(new Strategy({
   }, loginCallback));
 
 passport.serializeUser(function(user, done) {
-  console.log('serializeUser: ' + user._id);
   done(null, user._id);
 });
 
 passport.deserializeUser(function(id, done) {
-  console.log('\n\nDeserializer', id);
   UserModel.findById(id, function(err, user){
     console.log(user);
       if(!err) done(null, user);

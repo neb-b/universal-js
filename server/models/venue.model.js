@@ -8,7 +8,7 @@ const VenueSchema = new Schema({
   dateAdded: { type: 'Date', default: Date.now, required: true },
 });
 
-VenueSchema.statics.createAndSave = Promise.method(function (props) {
+VenueSchema.statics.createAndSave = Promise.method(function(props) {
   let newVenue = new VenueModel(props);
 
   newVenue.save((err, result) => {

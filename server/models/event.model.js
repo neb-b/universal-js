@@ -8,7 +8,7 @@ const EventSchema = new Schema({
   dateAdded: { type: 'Date', default: Date.now, required: true },
 });
 
-EventSchema.statics.createAndSave = Promise.method(function (props) {
+EventSchema.statics.createAndSave = Promise.method(function(props) {
   let newEvent = new EventModel(props);
 
   newEvent.save((err, result) => {

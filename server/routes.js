@@ -29,8 +29,7 @@ const Routing = () => {
   router.get('/events', Controllers.Events.searchEvents.bind(Controllers.Events));
   router.post('/events', Controllers.Events.createEvent.bind(Controllers.Events));
 
-  // Venue login/register test routes
-  // Right now a `GET` to test in browser easier
+  // Facebook login
   router.get('/users/login', passport.authenticate('facebook'));
 
   router.get('/users/login/callback',
@@ -38,6 +37,8 @@ const Routing = () => {
     (req, res) => res.cookie('loggedin', true).cookie('user', 'User').redirect('/'));
 
   router.get('/users/protected', ensureLoggedIn(), Controllers.Users.protected.bind(Controllers.Users));
+
+  // AccountKit Login
 
   // Venue Routes
   router.get('/venues/:id', Controllers.Venues.getVenue.bind(Controllers.Venues));
