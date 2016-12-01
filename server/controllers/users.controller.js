@@ -6,7 +6,9 @@ function UserController(opts = {}) {
     return new UserController(opts);
   }
 
-  this.User = opts.Venue || {};
+  this.User = opts.User || {};
+  this.Venue = opts.Venue || {};
+  this.Event = opts.Event || {};
 }
 
 UserController.prototype.searchUser = function searchUser(req, res, next) {
@@ -25,14 +27,7 @@ UserController.prototype.getProfile = function getProfile(req, res, next) {
 UserController.prototype.getUser = function getUser(req, res, next) {
   return Promise.resolve(this.User.findById(req.params.id))
     .then(user => res.send(user))
-    .catch(() => next(Boom.notFound('Venue not found')));
-};
-
-UserController.prototype.createUser = function createUser(req, res, next) {
-  return this.validateInput(req.body)
-    .then(params => this.User.createAndSave(params))
-    .then(newUser => res.send(newUser))
-    .catch(err => next(Boom.wrap(err)));
+    .catch(() => next(Boom.notFound('User not found')));
 };
 
 UserController.prototype.updateUser = function updateUser(req, res, next) {
@@ -41,19 +36,20 @@ UserController.prototype.updateUser = function updateUser(req, res, next) {
     .catch(err => next(Boom.wrap(err)));
 };
 
-UserController.prototype.deleteUser = function deleteUser(req, res, next) {
-  return Promise.resolve(this.User.findByIdAndRemove(req.params.id))
-    .then(user => res.send(user))
-    .catch(err => next(Boom.wrap(err)));
+UserController.prototype.addVenue = function addVenue(req, res, next) {
+  const fb_id = req.user.fb_id;
+
+  return Promise.resolve(this.User.find({ fb_id }))
+    .then(user => {
+      return Promise.props({
+        user,
+        venue: this.Venue.createAndSave(req.params)
+    })
+    .then(({ user, venue }) => {
+      user.venue = venue._id;
+      return user.save().exec()
+    })
 };
-
-UserController.prototype.validateInput = Promise.method(function validateInput({ name }) {
-  if(!name){
-    throw Boom.badRequest('Name parameter is required to create user');
-  }
-
-  return { name };
-});
 
 UserController.prototype.loginOrRegisterVenue = function loginOrRegisterVenue(req, res, next) {
   // body...

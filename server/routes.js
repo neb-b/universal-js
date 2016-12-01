@@ -16,7 +16,7 @@ const instantiation = () => {
   return {
     Events: new EventController ({ Event }),
     Venues: new VenueController ({ Venue }),
-    Users: new UserController ({ User })
+    Users: new UserController ({ User, Event, Venue })
   };
 };
 
@@ -44,7 +44,7 @@ const Routing = () => {
   router.get('/venues/:id', Controllers.Venues.getVenue.bind(Controllers.Venues));
   router.get('/venues/:id/profile', Controllers.Venues.getProfile.bind(Controllers.Venues));
   router.get('/venues', Controllers.Venues.searchVenue.bind(Controllers.Venues));
-  router.post('/venues', Controllers.Venues.createVenue.bind(Controllers.Venues));
+  router.post('/venues', ensureLoggedIn(), Controllers.Venues.createVenue.bind(Controllers.Venues));
   router.patch('/venues/:id', Controllers.Venues.updateVenue.bind(Controllers.Venues));
 
   router.use(BoomHandler);

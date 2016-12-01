@@ -19,9 +19,7 @@ const loginCallback = (accessToken, refreshToken, profile, done) => {
       return user;
     })
     .then(user => done(null, user))
-    .catch(err => {
-      console.log(err);
-    })
+    .catch(err => console.log(err));
 };
 
 passport.use(new Strategy({
@@ -36,7 +34,6 @@ passport.serializeUser(function(user, done) {
 
 passport.deserializeUser(function(id, done) {
   UserModel.findById(id, function(err, user){
-    console.log(user);
       if(!err) done(null, user);
       else done(err, null);
     });
