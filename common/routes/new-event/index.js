@@ -3,7 +3,7 @@ import { injectAsyncReducer } from '../../store'
 
 export default function createRoutes (store) {
   return {
-    path: 'account/dashboard/newevent',
+    path: 'account/dashboard/newevent/:id',
     getComponents (location, cb) {
       require.ensure([
         './new-event.connected',

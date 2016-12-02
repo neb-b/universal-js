@@ -5,7 +5,9 @@ import { css, StyleSheet } from 'aphrodite'
 const FacebookEvent = (props) => {
   const { name, id } = props
   return (
-    <Link to='/account/dashboard/newevent' className={css(styles.noLink)}>
+    <Link
+      to={`/account/dashboard/newevent/${id}`}
+      className={css(styles.noLink)}>
       <div
         className={css(styles.event)}>
         <div className={css(styles.eventText)}>

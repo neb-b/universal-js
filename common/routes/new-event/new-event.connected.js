@@ -8,14 +8,15 @@ import { loadFbEvent } from '../../redux/action-creators/load-fb-event'
 import NewEvent from '../../components/dashboard/new-event.connected'
 
 const redial = {
-  fetch: ({ dispatch }) => dispatch(loadFbEvent())
+  fetch: ({ dispatch, params: { id } }) => dispatch(loadFbEvent(id))
 }
 
 const mapStateToProps = (state) => ({
   dashboard: state.dashboard
 })
 
-const NewEventPage = ({ createEvent }) => {
+const NewEventPage = (props) => {
+  const { createEvent } = props
   return (
     <div className={css(styles.root)}>
       <Helmet title='New Event' />

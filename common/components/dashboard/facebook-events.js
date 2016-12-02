@@ -5,19 +5,19 @@ import FacebookEvent from './facebook-event'
 const events = [
   {
     name: 'Facebook event name 1',
-    id: 'event_id1'
+    id: '1283291831295'
   },
   {
     name: 'Facebook event name 2',
-    id: 'event_id2'
+    id: '1232932433245'
   },
   {
     name: 'Facebook event name 3',
-    id: 'event_id3'
+    id: '8908329084023'
   },
   {
     name: 'Facebook event name 4',
-    id: 'event_id4'
+    id: '3490238409234809'
   }
 ]
 
