@@ -25,6 +25,7 @@ const events = [
 const FacebookEvents = () => (
   <div className={css(styles.events)}>
     <h2>Facebook events</h2>
+    <p>Click to publish event</p>
     {
       events.map((event) => <FacebookEvent key={event.id} {...event} />)
     }
