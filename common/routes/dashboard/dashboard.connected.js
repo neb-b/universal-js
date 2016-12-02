@@ -16,7 +16,6 @@ const mapStateToProps = (state) => ({
 })
 
 const DashboardPage = (props) => {
-  console.log('props', props)
   const { dashboard, location: { query } } = props
   return (
     <div className={css(styles.root)}>
