@@ -15,10 +15,13 @@ const mapStateToProps = (state) => ({
   dashboard: state.dashboard
 })
 
-const DashboardPage = ({ dashboard }) => {
+const DashboardPage = (props) => {
+  console.log('props', props)
+  const { dashboard, location: { query } } = props
   return (
     <div className={css(styles.root)}>
       <Helmet title='Account Dashboard' />
+      { query.created && <div className={css(styles.alert)}>Event Created!</div>}
       <h2 className={css(styles.title)}>Account Dashboard</h2>
       <Dashboard {...dashboard} createEvent={createEvent} />
     </div>
@@ -33,6 +36,11 @@ const styles = StyleSheet.create({
     fontSize: 28,
     margin: '0 auto 1.5rem',
     color: '#b7b7b7'
+  },
+  alert: {
+    backgroundColor: '#85cb82',
+    borderRadius: 5,
+    marginBottom: 20
   }
 })
 
