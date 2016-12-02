@@ -18,7 +18,7 @@ const mapStateToProps = (state) => ({
 const DashboardPage = (props) => {
   const { dashboard, location: { query } } = props
   return (
-    <div className={css(styles.root)}>
+    <div>
       <Helmet title='Account Dashboard' />
       { query.created && <div className={css(styles.alert)}>Event Created!</div>}
       <h2 className={css(styles.title)}>Account Dashboard</h2>
@@ -28,9 +28,6 @@ const DashboardPage = (props) => {
 }
 
 const styles = StyleSheet.create({
-  root: {
-    maxWidth: 500
-  },
   title: {
     fontSize: 28,
     margin: '0 auto 1.5rem',

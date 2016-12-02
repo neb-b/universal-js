@@ -25,7 +25,6 @@ const styles = StyleSheet.create({
   },
   event: {
     height: '7em',
-    width: '50%',
     marginTop: 20,
     cursor: 'pointer',
     fontWeight: 'bold',

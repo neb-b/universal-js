@@ -2,14 +2,13 @@ import { createAction } from './create-action'
 import {
   LOAD_DASHBOARD_REQUEST,
   LOAD_DASHBOARD_SUCCESS,
-  LOAD_DASHBOARD_ERROR,
-  ROOT_URL
+  LOAD_DASHBOARD_ERROR, ROOT_URL
 } from '../constants'
 
 export function loadDashboard () {
   return (dispatch, getState, { axios }) => {
     dispatch({ type: LOAD_DASHBOARD_REQUEST })
-    return axios.get(`${ROOT_URL}/account/dashboard`)
+    return axios.get(`${ROOT_URL}/events`)
       .then(res => {
         dispatch(createAction(LOAD_DASHBOARD_SUCCESS, res.data))
       })

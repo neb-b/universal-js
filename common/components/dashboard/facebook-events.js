@@ -1,5 +1,5 @@
 import React from 'react'
-// import { css, StyleSheet } from 'aphrodite'
+import { css, StyleSheet } from 'aphrodite'
 import FacebookEvent from './facebook-event'
 
 const events = [
@@ -23,7 +23,7 @@ const events = [
 
 // will be passed a list of events in props
 const FacebookEvents = () => (
-  <div>
+  <div className={css(styles.events)}>
     <h2>Facebook events</h2>
     {
       events.map((event) => <FacebookEvent key={event.id} {...event} />)
@@ -31,8 +31,10 @@ const FacebookEvents = () => (
   </div>
 )
 
-// const styles = StyleSheet.create({
-//
-// })
+const styles = StyleSheet.create({
+  events: {
+
+  }
+})
 
 export default FacebookEvents

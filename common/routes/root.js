@@ -11,7 +11,6 @@ export default function createRoutes (store) {
     getChildRoutes (location, cb) {
       require.ensure([], (require) => {
         cb(null, [
-          require('./events').default(store), // no need to modify store, no reducer
           require('./new-event').default(store),
           require('./dashboard').default(store),
           require('./account').default,
