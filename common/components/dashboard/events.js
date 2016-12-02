@@ -1,5 +1,6 @@
 import React from 'react'
 import { StyleSheet, css } from 'aphrodite'
+import Event from './event'
 
 const Events = (props) => {
   const { events } = props
@@ -7,12 +8,7 @@ const Events = (props) => {
     <div className={css(styles.events)}>
       <h2>User created events</h2>
       {
-        events.map((event) => (
-          <div key={event.dateAdded}>
-            <h3>{event.name}</h3>
-            <p>Created at: {event.dateAdded}</p>
-          </div>
-        ))
+        events.length && events.map((event) => <Event {...event} />)
       }
     </div>
   )

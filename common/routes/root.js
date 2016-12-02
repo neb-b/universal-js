@@ -13,6 +13,7 @@ export default function createRoutes (store) {
         cb(null, [
           require('./new-event').default(store),
           require('./dashboard').default(store),
+          require('./event').default(store),
           require('./account').default,
           require('./login').default,
           require('./not-found').default
