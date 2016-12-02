@@ -5,6 +5,7 @@ import React from 'react'
 const CurrentEvents = () => (
   <div>
     <h2>Current Events</h2>
+    <p>A list of the events that the venue is currrently selling tickets for</p>
   </div>
 )
 
