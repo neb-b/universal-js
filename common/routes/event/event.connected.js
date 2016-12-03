@@ -3,24 +3,24 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { StyleSheet, css } from 'aphrodite'
 import Helmet from 'react-helmet'
-import { loadDashboard } from '../../redux/action-creators/dashboard'
+import { loadEvent } from '../../redux/action-creators/load-event'
 import Event from '../../components/event'
 
 const redial = {
-  fetch: ({ dispatch }) => dispatch(loadDashboard())
+  fetch: ({ dispatch, params: { eventId } }) => dispatch(loadEvent(eventId))
 }
 
 const mapStateToProps = (state) => ({
-  dashboard: state.dashboard
+  event: state.event
 })
 
 const EventPage = (props) => {
-  // const { dashboard, location: { query } } = props
+  const { event: { data } } = props
   return (
     <div>
       <Helmet title='Event Page' />
-      <h2 className={css(styles.title)}>Event Name</h2>
-      <Event />
+      <h2 className={css(styles.title)}>Event name: {data.name}</h2>
+      <Event {...data} />
     </div>
   )
 }

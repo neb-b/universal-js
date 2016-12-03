@@ -1,9 +1,9 @@
 import React from 'react'
 // import { StyleSheet, css } from 'aphrodite'
 
-const Event = () => (
+const Event = ({ dateAdded }) => (
   <div>
-    <p>Event info</p>
+    <p>Added: {dateAdded}</p>
   </div>
 )
 

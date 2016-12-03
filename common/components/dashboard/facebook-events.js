@@ -27,7 +27,7 @@ const FacebookEvents = () => (
     <h2>Facebook events</h2>
     <p>Click to publish event</p>
     {
-      events.map((event) => <FacebookEvent key={event.id} {...event} />)
+      events && events.map((event) => <FacebookEvent key={event.id} {...event} />)
     }
   </div>
 )

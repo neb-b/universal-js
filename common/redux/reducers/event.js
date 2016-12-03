@@ -16,8 +16,8 @@ export default function event (state = initialState, action) {
         loading: true,
         error: null}
     case LOAD_EVENT_SUCCESS:
-      return { ...state,
-        events: action.payload,
+      return {
+        data: action.payload,
         loading: false}
     case LOAD_EVENT_ERROR:
       return { ...state,
