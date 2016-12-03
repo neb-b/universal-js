@@ -6,7 +6,8 @@ import {
 
 const initialState = {
   loading: false,
-  error: null
+  error: null,
+  data: {}
 }
 
 export default function event (state = initialState, action) {

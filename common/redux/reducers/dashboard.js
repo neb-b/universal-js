@@ -6,7 +6,8 @@ import {
 
 const initialState = {
   loading: false,
-  error: null
+  error: null,
+  events: []
 }
 
 export default function dashboard (state = initialState, action) {
