@@ -8,7 +8,7 @@ const Events = (props) => {
     <div className={css(styles.events)}>
       <h2>User created events</h2>
       {
-        events.length && events.map((event) => <Event {...event} />)
+        events.map((event) => <Event {...event} />)
       }
     </div>
   )
