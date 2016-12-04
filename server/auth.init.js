@@ -10,18 +10,19 @@ import UserModel from './models/user.model';
 const loginCallback = (accessToken, refreshToken, profile, done) => {
   const { displayName, id } = profile;
 
-  return Promise.resolve(UserModel.findOne({ fb_id: id }))
+  return UserModel.findOne({ fb_id: id })
+    .exec()
     .then(user => {
       if(!user){
-        return UserModel.createAndSave({ fb_id: id, name: displayName });
+        return UserModel.createAndSave({ fb_id: id, name: displayName, token: accessToken });
       }
 
-      return user;
+      user.token = accessToken;
+
+      return user.save();
     })
     .then(user => done(null, user))
-    .catch(err => {
-      console.log(err);
-    })
+    .catch(err => done(err, null));
 };
 
 passport.use(new Strategy({
@@ -31,14 +32,11 @@ passport.use(new Strategy({
   }, loginCallback));
 
 passport.serializeUser(function(user, done) {
-  console.log('serializeUser: ' + user._id);
   done(null, user._id);
 });
 
 passport.deserializeUser(function(id, done) {
-  console.log('\n\nDeserializer', id);
   UserModel.findById(id, function(err, user){
-    console.log(user);
       if(!err) done(null, user);
       else done(err, null);
     });

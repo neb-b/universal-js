@@ -16,7 +16,7 @@ const instantiation = () => {
   return {
     Events: new EventController ({ Event }),
     Venues: new VenueController ({ Venue }),
-    Users: new UserController ({ User })
+    Users: new UserController ({ User, Event, Venue })
   };
 };
 
@@ -29,9 +29,8 @@ const Routing = () => {
   router.get('/events', Controllers.Events.searchEvents.bind(Controllers.Events));
   router.post('/events', Controllers.Events.createEvent.bind(Controllers.Events));
 
-  // Venue login/register test routes
-  // Right now a `GET` to test in browser easier
-  router.get('/users/login', passport.authenticate('facebook'));
+  // Facebook login
+  router.get('/users/login', passport.authenticate('facebook', { scope: ['user_friends', 'manage_pages'] }));
 
   router.get('/users/login/callback',
     passport.authenticate('facebook', { failureRedirect: '/' }),
@@ -39,11 +38,17 @@ const Routing = () => {
 
   router.get('/users/protected', ensureLoggedIn(), Controllers.Users.protected.bind(Controllers.Users));
 
+  // Adds venue under a User
+  router.post('/users/venue', ensureLoggedIn(), Controllers.Users.addVenue.bind(Controllers.Users));
+  // Gets user's venue populated
+  router.get('/users/:id/venue', Controllers.Users.getVenue.bind(Controllers.Users));
+  // Gets user's fbEvents, venue and pages
+  router.get('/users/dashboard', ensureLoggedIn(), Controllers.Users.dashBoard.bind(Controllers.Users));
   // Venue Routes
   router.get('/venues/:id', Controllers.Venues.getVenue.bind(Controllers.Venues));
   router.get('/venues/:id/profile', Controllers.Venues.getProfile.bind(Controllers.Venues));
   router.get('/venues', Controllers.Venues.searchVenue.bind(Controllers.Venues));
-  router.post('/venues', Controllers.Venues.createVenue.bind(Controllers.Venues));
+  router.post('/venues', ensureLoggedIn(), Controllers.Venues.createVenue.bind(Controllers.Venues));
   router.patch('/venues/:id', Controllers.Venues.updateVenue.bind(Controllers.Venues));
 
   router.use(BoomHandler);

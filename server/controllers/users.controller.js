@@ -1,62 +1,97 @@
 import Promise from 'bluebird';
 import Boom from 'boom';
+import _ from 'lodash';
+
+import FB from 'fbgraph';
+Promise.promisifyAll(FB);
 
 function UserController(opts = {}) {
   if (!(this instanceof UserController)) {
     return new UserController(opts);
   }
 
-  this.User = opts.Venue || {};
+  this.User = opts.User || {};
+  this.Venue = opts.Venue || {};
+  this.Event = opts.Event || {};
 }
 
 UserController.prototype.searchUser = function searchUser(req, res, next) {
-  // Queries are not promises.
-  return Promise.resolve(this.User.find())
+  return this.User.find()
+    .exec()
     .then(users => res.send(users))
     .catch(() => next(Boom.notFound('No users found')));
 };
 
 UserController.prototype.getProfile = function getProfile(req, res, next) {
-  return Promise.resolve(this.User.findById(req.params.id))
+  return this.User.findById(req.params.id)
+    .exec()
     .then(user => res.send(user))
     .catch(err => next(Boom.notFound('No user found')));
 };
 
 UserController.prototype.getUser = function getUser(req, res, next) {
-  return Promise.resolve(this.User.findById(req.params.id))
+  return this.User.findById(req.params.id)
+    .exec()
     .then(user => res.send(user))
-    .catch(() => next(Boom.notFound('Venue not found')));
-};
-
-UserController.prototype.createUser = function createUser(req, res, next) {
-  return this.validateInput(req.body)
-    .then(params => this.User.createAndSave(params))
-    .then(newUser => res.send(newUser))
-    .catch(err => next(Boom.wrap(err)));
+    .catch(() => next(Boom.notFound('User not found')));
 };
 
 UserController.prototype.updateUser = function updateUser(req, res, next) {
-  return Promise.resolve(this.User.findByIdAndUpdate(req.params.id, req.body, { new: true }))
+  return this.User.findByIdAndUpdate(req.params.id, req.body, { new: true })
+    .exec()
     .then(user => res.send(user))
     .catch(err => next(Boom.wrap(err)));
 };
 
-UserController.prototype.deleteUser = function deleteUser(req, res, next) {
-  return Promise.resolve(this.User.findByIdAndRemove(req.params.id))
+UserController.prototype.addVenue = function addVenue(req, res, next) {
+  const fb_id = req.user.fb_id;
+  // TODO (sprada): Add check for admin users
+  return this.User.findOne({ fb_id })
+    .exec()
+    .then(user => {
+      return Promise.props({
+        user,
+        venue: this.Venue.createAndSave(req.params)
+      });
+    })
+    .then(({ user, venue }) => {
+      user.venue = venue._id;
+
+      return user.save().exec()
+    })
     .then(user => res.send(user))
     .catch(err => next(Boom.wrap(err)));
 };
 
-UserController.prototype.validateInput = Promise.method(function validateInput({ name }) {
-  if(!name){
-    throw Boom.badRequest('Name parameter is required to create user');
-  }
+UserController.prototype.getVenue = function getVenue(req, res, next) {
+  return this.User.findById(req.params.id)
+    .populate('venue')
+    .exec()
+    .then(user => res.send(user))
+    .catch(err => next(Boom.wrap(err)));
+};
 
-  return { name };
-});
-
-UserController.prototype.loginOrRegisterVenue = function loginOrRegisterVenue(req, res, next) {
-  // body...
+UserController.prototype.dashBoard = function dashBoard(req, res, next) {
+  return this.User.findById(req.user.id)
+    .populate('venue')
+    .exec()
+    .then(user => {
+      FB.setAccessToken(user.token);
+      return Promise.props({
+        user,
+        pages: FB.getAsync('me/accounts')
+      });
+    })
+    .then(({ user, pages }) => {
+      return Promise.props({
+        user,
+        pages: pages.data,
+        fbEvents: Promise.all(_.map(pages.data, page => FB.getAsync(`${page.id}/events`)))
+          .then(events => _.flatten(_.map(events, event => event.data)))
+      });
+    })
+    .then(data => res.send(data))
+    .catch(err => res.send(err));
 };
 
 UserController.prototype.loginCallback = function(req, res, next) {

@@ -4,11 +4,13 @@ import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
 const VenueSchema = new Schema({
-  name: { type: 'String', required: true },
+  name: { type: 'String', required: false },
+  fbEvents: [{ type: 'String', required: false }],
+  createdEvents: [{ type: Schema.Types.ObjectId, ref: 'Event' }],
   dateAdded: { type: 'Date', default: Date.now, required: true },
 });
 
-VenueSchema.statics.createAndSave = Promise.method(function (props) {
+VenueSchema.statics.createAndSave = Promise.method(function(props) {
   let newVenue = new VenueModel(props);
 
   newVenue.save((err, result) => {

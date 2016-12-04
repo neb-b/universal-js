@@ -10,14 +10,15 @@ function EventController(opts = {}) {
 }
 
 EventController.prototype.getEvent = function getEvent(req, res, next) {
-  return Promise.resolve(this.Event.findById(req.params.id))
+  return this.Event.findById(req.params.id)
+    .exec()
     .then(event => res.send(event))
     .catch(() => next(Boom.notFound('Event not found')));
 };
 
 EventController.prototype.searchEvents = function getEvents(req, res, next) {
-  // Queries are not promises.
-  return Promise.resolve(this.Event.find())
+  return this.Event.find()
+    .exec()
     .then(events => res.send(events))
     .catch(() => next(Boom.notFound('No events found')));
 };
@@ -30,13 +31,15 @@ EventController.prototype.createEvent = function createEvent(req, res, next) {
 };
 
 EventController.prototype.updateEvent = function updateEvent(req, res, next) {
-  return Promise.resolve(this.Event.findByIdAndUpdate(req.params.id, req.body, { new: true }))
+  return this.Event.findByIdAndUpdate(req.params.id, req.body, { new: true })
+    .exec()
     .then(event => res.send(event))
     .catch(err => next(Boom.wrap(err)));
 };
 
 EventController.prototype.deleteEvent = function deleteEvent(req, res, next) {
-  return Promise.resolve(this.Event.findByIdAndRemove(req.params.id))
+  return this.Event.findByIdAndRemove(req.params.id)
+    .exec()
     .then(event => res.send(event))
     .catch(err => next(Boom.wrap(err)));
 };
