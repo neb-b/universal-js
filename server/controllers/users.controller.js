@@ -1,5 +1,9 @@
 import Promise from 'bluebird';
 import Boom from 'boom';
+import _ from 'lodash';
+
+import FB from 'fbgraph';
+Promise.promisifyAll(FB);
 
 function UserController(opts = {}) {
   if (!(this instanceof UserController)) {
@@ -12,7 +16,6 @@ function UserController(opts = {}) {
 }
 
 UserController.prototype.searchUser = function searchUser(req, res, next) {
-  // Queries are not promises.
   return this.User.find()
     .exec()
     .then(users => res.send(users))
@@ -42,7 +45,7 @@ UserController.prototype.updateUser = function updateUser(req, res, next) {
 
 UserController.prototype.addVenue = function addVenue(req, res, next) {
   const fb_id = req.user.fb_id;
-
+  // TODO (sprada): Add check for admin users
   return this.User.findOne({ fb_id })
     .exec()
     .then(user => {
@@ -68,8 +71,18 @@ UserController.prototype.getVenue = function getVenue(req, res, next) {
     .catch(err => next(Boom.wrap(err)));
 };
 
-UserController.prototype.loginOrRegisterVenue = function loginOrRegisterVenue(req, res, next) {
-  // body...
+UserController.prototype.dashBoard = function dashBoard(req, res, next) {
+  return this.User.findById(req.user.id)
+    .exec()
+    .then(user => {
+      FB.setAccessToken(user.token);
+      return FB.getAsync('me/accounts')
+    })
+    .then(pages => {
+      return Promise.all(_.map(pages.data, page => FB.getAsync(`${page.id}/events`)));
+    })
+    .then(events => res.send(events))
+    .catch(err => res.send(err));
 };
 
 UserController.prototype.loginCallback = function(req, res, next) {

@@ -30,7 +30,7 @@ const Routing = () => {
   router.post('/events', Controllers.Events.createEvent.bind(Controllers.Events));
 
   // Facebook login
-  router.get('/users/login', passport.authenticate('facebook'));
+  router.get('/users/login', passport.authenticate('facebook', { scope: ['user_friends', 'manage_pages'] }));
 
   router.get('/users/login/callback',
     passport.authenticate('facebook', { failureRedirect: '/' }),
@@ -43,7 +43,7 @@ const Routing = () => {
   // Gets user's venue populated
   router.get('/users/:id/venue', Controllers.Users.getVenue.bind(Controllers.Users));
 
-
+  router.get('/test', ensureLoggedIn(), Controllers.Users.dashBoard.bind(Controllers.Users));
   // Venue Routes
   router.get('/venues/:id', Controllers.Venues.getVenue.bind(Controllers.Venues));
   router.get('/venues/:id/profile', Controllers.Venues.getProfile.bind(Controllers.Venues));
