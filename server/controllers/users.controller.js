@@ -86,11 +86,17 @@ UserController.prototype.dashBoard = function dashBoard(req, res, next) {
       return Promise.props({
         user,
         pages: pages.data,
-        fbEvents: Promise.all(_.map(pages.data, page => FB.getAsync(`${page.id}/events`)))
-          .then(events => _.flatten(_.map(events, event => event.data)))
+        events: Promise.all(_.map(pages.data, page => FB.getAsync(`${page.id}/events`)))
       });
     })
-    .then(data => res.send(data))
+    .then(({ user, pages, events }) => {
+      let entity = {
+        user,
+        pages: _.map(pages, (page, i) => _.assign({}, page, { events: events[i].data }))
+      };
+
+      res.send(entity);
+    })
     .catch(err => res.send(err));
 };
 
