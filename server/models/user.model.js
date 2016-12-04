@@ -7,6 +7,7 @@ const UserSchema = new Schema({
   name: { type: 'String', required: false },
   email: { type: 'String', required: false },
   fb_id: { type: 'String', required: false },
+  token: { type: 'String', required: false },
   ak_id: { type: 'String', required: false },
   admin: { type: 'Boolean', default: false, required: true },
   venue: { type: Schema.Types.ObjectId, ref: 'Venue' },
