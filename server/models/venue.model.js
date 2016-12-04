@@ -4,7 +4,7 @@ import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
 const VenueSchema = new Schema({
-  name: { type: 'String', required: true },
+  name: { type: 'String', required: false },
   dateAdded: { type: 'Date', default: Date.now, required: true },
 });
 

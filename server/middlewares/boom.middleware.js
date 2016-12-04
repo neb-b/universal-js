@@ -1,5 +1,6 @@
 // TODO (sprada): Investigate error handling with server-side rendering
 export default function (err, req, res, next) {
+  console.log(err);
   if(err && err.output){
     const { payload, statusCode } = err.output;
 

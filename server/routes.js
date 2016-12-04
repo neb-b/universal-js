@@ -38,7 +38,11 @@ const Routing = () => {
 
   router.get('/users/protected', ensureLoggedIn(), Controllers.Users.protected.bind(Controllers.Users));
 
-  // AccountKit Login
+  // Adds venue under a User
+  router.post('/users/venue', ensureLoggedIn(), Controllers.Users.addVenue.bind(Controllers.Users));
+  // Gets user's venue populated
+  router.get('/users/:id/venue', Controllers.Users.getVenue.bind(Controllers.Users));
+
 
   // Venue Routes
   router.get('/venues/:id', Controllers.Venues.getVenue.bind(Controllers.Venues));
