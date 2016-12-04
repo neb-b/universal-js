@@ -5,6 +5,8 @@ const Schema = mongoose.Schema;
 
 const VenueSchema = new Schema({
   name: { type: 'String', required: false },
+  fbEvents: [{ type: 'String', required: false }],
+  createdEvents: [{ type: Schema.Types.ObjectId, ref: 'Event' }],
   dateAdded: { type: 'Date', default: Date.now, required: true },
 });
 

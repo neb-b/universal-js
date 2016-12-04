@@ -4,7 +4,8 @@ import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
 const EventSchema = new Schema({
-  name: { type: 'String', required: true },
+  name: { type: 'String', required: false },
+  fbEventId: { type: 'String', required: false },
   dateAdded: { type: 'Date', default: Date.now, required: true },
 });
 
