@@ -73,15 +73,24 @@ UserController.prototype.getVenue = function getVenue(req, res, next) {
 
 UserController.prototype.dashBoard = function dashBoard(req, res, next) {
   return this.User.findById(req.user.id)
+    .populate('venue')
     .exec()
     .then(user => {
       FB.setAccessToken(user.token);
-      return FB.getAsync('me/accounts')
+      return Promise.props({
+        user,
+        pages: FB.getAsync('me/accounts')
+      });
     })
-    .then(pages => {
-      return Promise.all(_.map(pages.data, page => FB.getAsync(`${page.id}/events`)));
+    .then(({ user, pages }) => {
+      return Promise.props({
+        user,
+        pages: pages.data,
+        fbEvents: Promise.all(_.map(pages.data, page => FB.getAsync(`${page.id}/events`)))
+          .then(events => _.flatten(_.map(events, event => event.data)))
+      });
     })
-    .then(events => res.send(events))
+    .then(data => res.send(data))
     .catch(err => res.send(err));
 };
 
