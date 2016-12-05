@@ -8,7 +8,7 @@ import {
 export function loadDashboard () {
   return (dispatch, getState, { axios }) => {
     dispatch({ type: LOAD_DASHBOARD_REQUEST })
-    return axios.get(`${ROOT_URL}/events`)
+    return axios.get(`${ROOT_URL}/users/dashboard`)
       .then(res => {
         dispatch(createAction(LOAD_DASHBOARD_SUCCESS, res.data))
       })
