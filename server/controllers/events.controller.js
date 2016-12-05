@@ -40,7 +40,7 @@ EventController.prototype.createEvent = function createEvent(req, res, next) {
       }
 
       venue = dbVenue;
-      return venue.events.create(req.body);
+      return venue.createdEvents.create(req.body);
     })
     .then(newEvent => res.send(newEvent))
     .catch(err => next(Boom.wrap(err)));
