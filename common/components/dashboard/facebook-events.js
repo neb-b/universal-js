@@ -6,8 +6,8 @@ const FacebookEvents = (props) => {
   const { pages } = props
   return (
     <div className={css(styles.events)}>
-      <h2>Your available Facebook Events</h2>
-      <p>Click one to create an event</p>
+      <h2>Publish a new event</h2>
+      <p className={css(styles.subHeading)}>Create an event from one of your Facebook events</p>
       {
         pages && pages.length
         ? pages && pages.map((page) => <FacebookPage key={page.id} {...page} />)
@@ -18,8 +18,8 @@ const FacebookEvents = (props) => {
 }
 
 const styles = StyleSheet.create({
-  events: {
-
+  subHeading: {
+    marginBottom: 0
   }
 })
 
