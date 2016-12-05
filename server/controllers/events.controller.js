@@ -6,6 +6,8 @@ function EventController(opts = {}) {
     return new EventController(opts);
   }
 
+  this.User = opts.User || {};
+  this.Venue = opts.Venue || {};
   this.Event = opts.Event || {};
 }
 
@@ -24,8 +26,22 @@ EventController.prototype.searchEvents = function getEvents(req, res, next) {
 };
 
 EventController.prototype.createEvent = function createEvent(req, res, next) {
+  let user, venue;
+
   return this.validateInput(req.body)
-    .then(params => this.Event.createAndSave(params))
+    .then(params => this.User.findById(req.user.id).exec())
+    .then(dbUser => {
+      user = dbUser;
+      return this.Venue.findById(user.venue).exec();
+    })
+    .then(dbVenue => {
+      if(!dbVenue){
+        return Boom.preconditionFailed('You need to register a venue to create events');
+      }
+
+      venue = dbVenue;
+      return venue.events.create(req.body);
+    })
     .then(newEvent => res.send(newEvent))
     .catch(err => next(Boom.wrap(err)));
 };
