@@ -5,7 +5,7 @@ import { StyleSheet, css } from 'aphrodite'
 import Helmet from 'react-helmet'
 import { createEvent } from '../../redux/action-creators/create-event'
 import { loadFbEvent } from '../../redux/action-creators/load-fb-event'
-import NewEvent from '../../components/dashboard/new-event.connected'
+import NewEvent from '../../components/new-event.connected'
 
 const redial = {
   fetch: ({ dispatch, params: { id } }) => dispatch(loadFbEvent(id))
