@@ -44,9 +44,8 @@ UserController.prototype.updateUser = function updateUser(req, res, next) {
 };
 
 UserController.prototype.addVenue = function addVenue(req, res, next) {
-  const fb_id = req.user.fb_id;
   // TODO (sprada): Add check for admin users
-  return this.User.findOne({ fb_id })
+  return this.User.findById(req.user.id)
     .exec()
     .then(user => {
       return Promise.props({
