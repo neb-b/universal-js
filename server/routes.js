@@ -46,6 +46,9 @@ const Routing = () => {
   router.get('/users/:id/venue', Controllers.Users.getVenue.bind(Controllers.Users));
   // Gets user's fbEvents, venue and pages
   router.get('/users/dashboard', ensureLoggedIn(), Controllers.Users.dashBoard.bind(Controllers.Users));
+  // Get fbEvents by fb_id
+  router.get('/users/events/facebook/:id', ensureLoggedIn(), Controllers.Users.getFBEvent.bind(Controllers.Users));
+
   // Venue Routes
   router.get('/venues/:id', Controllers.Venues.getVenue.bind(Controllers.Venues));
   router.get('/venues/:id/profile', Controllers.Venues.getProfile.bind(Controllers.Venues));

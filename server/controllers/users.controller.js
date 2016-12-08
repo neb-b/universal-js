@@ -99,8 +99,15 @@ UserController.prototype.dashBoard = function dashBoard(req, res, next) {
     .catch(err => res.send(err));
 };
 
-UserController.prototype.loginCallback = function(req, res, next) {
-  // body...
+UserController.prototype.getFBEvent = function(req, res, next) {
+  return this.User.findById(req.user.id)
+    .exec()
+    .then(user => {
+      FB.setAccessToken(user.token);
+      return FB.getAsync(req.params.id)
+    })
+    .then(event => res.send(event))
+    .catch(err => next(Boom.wrap(err)));
 };
 
 UserController.prototype.protected = function(req, res, next) {
