@@ -12,54 +12,44 @@ function EventController(opts = {}) {
 }
 
 EventController.prototype.getEvent = function getEvent(req, res, next) {
-  return this.Event.findById(req.params.id)
-    .exec()
+  return this.Event.findByIdAsync(req.params.id)
     .then(event => res.send(event))
     .catch(() => next(Boom.notFound('Event not found')));
 };
 
 EventController.prototype.searchEvents = function getEvents(req, res, next) {
-  return this.Event.find()
-    .exec()
+  return this.Event.findAsync(req.query)
     .then(events => res.send(events))
-    .catch(() => next(Boom.notFound('No events found')));
+    .catch((err) => next(Boom.notFound('No events found')));
 };
 
 EventController.prototype.createEvent = function createEvent(req, res, next) {
-  let user, venue;
-
   return this.validateInput(req.body)
-    .then(params => this.User.findById(req.user.id).exec())
-    .then(dbUser => {
-      user = dbUser;
-      return this.Venue.findById(user.venue).exec();
-    })
-    .then(dbVenue => {
+    .then(params => this.User.findByIdAsync(req.user.id))
+    .then(user => this.Venue.findByIdAsync(user.venue))
+    .then(venue => {
       if(!dbVenue){
         return Promise.reject(Boom.preconditionFailed('You need to register a venue to create events'));
       }
-      console.log('dbVenue', dbVenue)
-      venue = dbVenue;
-      return this.Event.createAndSave(req.body);
+
+      return Promise.all([ venue, this.Event.createAndSave(req.body) ]);
     })
-    .then(newEvent => {
+    .spread((venue, newEvent) => {
       venue.createdEvents.push(newEvent._id);
-      return Promise.all([ venue.save(), newEvent ])
+      return Promise.all([ venue.saveAsync(), newEvent ])
     })
     .spread((venue, newEvent) => res.send(newEvent))
     .catch(err => next(Boom.wrap(err)));
 };
 
 EventController.prototype.updateEvent = function updateEvent(req, res, next) {
-  return this.Event.findByIdAndUpdate(req.params.id, req.body, { new: true })
-    .exec()
+  return this.Event.findByIdAndUpdateAsync(req.params.id, req.body, { new: true })
     .then(event => res.send(event))
     .catch(err => next(Boom.wrap(err)));
 };
 
 EventController.prototype.deleteEvent = function deleteEvent(req, res, next) {
-  return this.Event.findByIdAndRemove(req.params.id)
-    .exec()
+  return this.Event.findByIdAndRemoveAsync(req.params.id)
     .then(event => res.send(event))
     .catch(err => next(Boom.wrap(err)));
 };

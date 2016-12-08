@@ -42,6 +42,8 @@ const Routing = () => {
 
   // Adds venue under a User
   router.post('/users/venue', ensureLoggedIn(), Controllers.Users.addVenue.bind(Controllers.Users));
+  // Gets venue under a User
+  router.get('/users/venue', ensureLoggedIn(), Controllers.Users.getVenue.bind(Controllers.Users));
   // Gets user's venue populated
   router.get('/users/:id/venue', Controllers.Users.getVenue.bind(Controllers.Users));
   // Gets user's fbEvents, venue and pages
