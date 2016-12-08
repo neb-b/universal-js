@@ -50,13 +50,13 @@ UserController.prototype.addVenue = function addVenue(req, res, next) {
     .then(user => {
       return Promise.props({
         user,
-        venue: this.Venue.createAndSave(req.params)
+        venue: this.Venue.createAndSave(req.body)
       });
     })
     .then(({ user, venue }) => {
       user.venue = venue._id;
 
-      return user.save().exec()
+      return user.save()
     })
     .then(user => res.send(user))
     .catch(err => next(Boom.wrap(err)));

@@ -36,13 +36,17 @@ EventController.prototype.createEvent = function createEvent(req, res, next) {
     })
     .then(dbVenue => {
       if(!dbVenue){
-        return Boom.preconditionFailed('You need to register a venue to create events');
+        return Promise.reject(Boom.preconditionFailed('You need to register a venue to create events'));
       }
-
+      console.log('dbVenue', dbVenue)
       venue = dbVenue;
-      return venue.createdEvents.create(req.body);
+      return this.Event.createAndSave(req.body);
     })
-    .then(newEvent => res.send(newEvent))
+    .then(newEvent => {
+      venue.createdEvents.push(newEvent._id);
+      return Promise.all([ venue.save(), newEvent ])
+    })
+    .spread((venue, newEvent) => res.send(newEvent))
     .catch(err => next(Boom.wrap(err)));
 };
 
