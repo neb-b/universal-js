@@ -14,14 +14,22 @@ describe('UserController', () => {
     it('returns user back from serialized logged in user', (done) => {
       let mockResponse = { send: td.function() };
       let mockRequest = { user: { id: 'test-id' } };
+      let mockPopulate = { populate: td.function() };
+      let mockExec = { execAsync: td.function() };
       let mockUser = {
         name: 'sean',
         id: 'test-id',
         foo: 'bar'
       };
 
-      controller.User = { findByIdAsync: td.function() };
-      td.when(controller.User.findByIdAsync('test-id'))
+      controller.User = { findById: td.function() };
+      td.when(controller.User.findById('test-id'))
+        .thenReturn(mockPopulate);
+
+      td.when(mockPopulate.populate('club'))
+        .thenReturn(mockExec);
+
+      td.when(mockExec.execAsync())
         .thenResolve(mockUser);
 
       td.when(mockResponse.send(mockUser))
@@ -34,9 +42,17 @@ describe('UserController', () => {
       let mockNext = td.function();
       let mockRequest = { user: { id: 'test-id' } };
       let mockError = new Error('test-error');
+      let mockPopulate = { populate: td.function() };
+      let mockExec = { execAsync: td.function() };
 
-      controller.User = { findByIdAsync: td.function() };
-      td.when(controller.User.findByIdAsync('test-id'))
+      controller.User = { findById: td.function() };
+      td.when(controller.User.findById('test-id'))
+        .thenReturn(mockPopulate);
+
+      td.when(mockPopulate.populate('club'))
+        .thenReturn(mockExec);
+
+      td.when(mockExec.execAsync())
         .thenReject(mockError);
 
       td.when(mockNext(Boom.wrap(mockError)))
@@ -45,9 +61,6 @@ describe('UserController', () => {
       controller.getUser(mockRequest, _.noop, mockNext);
     });
   });
-
-  // getUser
-  // updateUser
 
   context('updateUser', () => {
     it('returns updated user', (done) => {
@@ -83,6 +96,16 @@ describe('UserController', () => {
         .thenDo(() => { done() });
 
       controller.updateUser(mockRequest, _.noop, mockNext);
+    });
+  });
+
+  context('dashBoard', () => {
+    it('it returns all data from logged in user', () => {
+
+    });
+
+    it('handles errors', () => {
+
     });
   });
 });
