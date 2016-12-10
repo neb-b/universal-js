@@ -17,15 +17,8 @@ EventController.prototype.getEvent = function getEvent(req, res, next) {
     .catch(() => next(Boom.notFound('Event not found')));
 };
 
-EventController.prototype.searchEvents = function getEvents(req, res, next) {
-  return this.Event.findAsync(req.query)
-    .then(events => res.send(events))
-    .catch((err) => next(Boom.notFound('No events found')));
-};
-
 EventController.prototype.createEvent = function createEvent(req, res, next) {
-  return this.validateInput(req.body)
-    .then(params => this.User.findByIdAsync(req.user.id))
+    return this.User.findByIdAsync(req.user.id))
     .then(user => this.Venue.findByIdAsync(user.venue))
     .then(venue => {
       if(!dbVenue){
@@ -54,12 +47,5 @@ EventController.prototype.deleteEvent = function deleteEvent(req, res, next) {
     .catch(err => next(Boom.wrap(err)));
 };
 
-EventController.prototype.validateInput = Promise.method(function validateInput({ name }) {
-  if(!name){
-    throw Boom.badRequest('name parameter is required to create event');
-  }
-
-  return { name };
-});
 
 export default EventController;

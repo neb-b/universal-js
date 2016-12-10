@@ -15,18 +15,6 @@ function UserController(opts = {}) {
   this.Event = opts.Event || {};
 }
 
-UserController.prototype.searchUser = function searchUser(req, res, next) {
-  return this.User.findAsync(req.query)
-    .then(users => res.send(users))
-    .catch(() => next(Boom.notFound('No users found')));
-};
-
-UserController.prototype.getProfile = function getProfile(req, res, next) {
-  return this.User.findByIdAsync(req.params.id)
-    .then(user => res.send(user))
-    .catch(err => next(Boom.notFound('No user found')));
-};
-
 UserController.prototype.getUser = function getUser(req, res, next) {
   return this.User.findByIdAsync(req.params.id)
     .then(user => res.send(user))
@@ -92,14 +80,6 @@ UserController.prototype.dashBoard = function dashBoard(req, res, next) {
       res.send(entity);
     })
     .catch(err => res.send(err));
-};
-
-UserController.prototype.loginCallback = function(req, res, next) {
-  // body...
-};
-
-UserController.prototype.protected = function(req, res, next) {
-  return res.send('TOP SECRET');
 };
 
 export default UserController;
