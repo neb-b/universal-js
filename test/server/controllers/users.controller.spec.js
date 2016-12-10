@@ -1,100 +1,88 @@
 import td from 'testdouble';
 import _ from 'lodash';
+import Boom from 'boom';
 
 import UserController from '../../../server/controllers/users.controller';
 
 describe('UserController', () => {
+  let controller;
+
+  before(() => controller = new UserController());
   afterEach(() => td.reset());
 
-  context.only('searchUser', () => {
-    it('returns users back from query', () => {});
-    it('returns empty array if nothing is found', () => {});
-
-  });
-
   context('getUser', () => {
-    it('returns user', (done) => {
-      let controller = new UserController();
-      let user = { "name": "test-name" };
-      let mockRequest = { params: { id: 'test-id' } };
+    it('returns user back from serialized logged in user', (done) => {
       let mockResponse = { send: td.function() };
-      controller.User = { findById: td.function() };
+      let mockRequest = { user: { id: 'test-id' } };
+      let mockUser = {
+        name: 'sean',
+        id: 'test-id',
+        foo: 'bar'
+      };
 
-      td.when(controller.User.findById(mockRequest.params.id)).thenReturn(user);
-      td.when(mockResponse.send(user)).thenDo(() => done());
+      controller.User = { findByIdAsync: td.function() };
+      td.when(controller.User.findByIdAsync('test-id'))
+        .thenResolve(mockUser);
+
+      td.when(mockResponse.send(mockUser))
+        .thenDo(() => { done() });
 
       controller.getUser(mockRequest, mockResponse, _.noop);
     });
-  });
 
-  context('getUsers', () => {
-    it('returns a list of users', (done) => {
-      let controller = new UserController();
-      let users = [{ "name": "sergio" }, { "name": "sean" }];
-      let mockResponse = { send: td.function() };
-      controller.User = { find: td.function() };
+    it('handles errors', (done) => {
+      let mockNext = td.function();
+      let mockRequest = { user: { id: 'test-id' } };
+      let mockError = new Error('test-error');
 
-      td.when(controller.User.find()).thenReturn(users);
-      td.when(mockResponse.send(users)).thenDo(() => done());
+      controller.User = { findByIdAsync: td.function() };
+      td.when(controller.User.findByIdAsync('test-id'))
+        .thenReject(mockError);
 
-      controller.getUsers(_.noop, mockResponse, _.noop);
+      td.when(mockNext(Boom.wrap(mockError)))
+        .thenDo(() => { done() });
+
+      controller.getUser(mockRequest, _.noop, mockNext);
     });
   });
 
-  context('createUser', () => {
-    it('returns created user', (done) => {
-      let controller = new UserController();
-      let user = { "name": "test-name" };
-      let mockResponse = { send: td.function() };
-      let mockRequest = {
-        body: {
-          name: 'test-name',
-          username: 'test-username',
-          email: 'test-email'
-        }
-      };
-
-      controller.User = { createAndSave: td.function() };
-
-      td.when(controller.User.createAndSave(mockRequest.body)).thenResolve(user);
-      td.when(mockResponse.send(user)).thenDo(() => done());
-
-      controller.createUser(mockRequest, mockResponse, _.noop);
-    });
-  });
+  // getUser
+  // updateUser
 
   context('updateUser', () => {
     it('returns updated user', (done) => {
-      let controller = new UserController();
-      let user = { "name": "test-name" };
+      let mockUser = { "name": "test-name" };
       let mockResponse = { send: td.function() };
       let mockRequest = {
-        params: { id: 'test-id' },
+        user: { id: 'test-id' },
         body: { "name": "test-name" }
       };
       
-      controller.User = { findByIdAndUpdate: td.function() };
+      controller.User = { findByIdAndUpdateAsync: td.function() };
+      td.when(controller.User.findByIdAndUpdateAsync(mockRequest.user.id, mockRequest.body, { new: true }))
+        .thenResolve(mockUser);
 
-      td.when(controller.User.findByIdAndUpdate(mockRequest.params.id, mockRequest.body, { new: true }))
-        .thenReturn(user);
-      td.when(mockResponse.send(user)).thenDo(() => done());
+      td.when(mockResponse.send(mockUser)).thenDo(() => done());
 
       controller.updateUser(mockRequest, mockResponse, _.noop);
     });
-  });
 
-  context('deleteUser', () => {
-    it('returns deleted user', (done) => {
-      let controller = new UserController();
-      let user = { "name": "test-name" };
-      let mockRequest = { params: { id: 'test-id' } };
-      let mockResponse = { send: td.function() };
-      controller.User = { findByIdAndRemove: td.function() };
+    it('handles errors', (done) => {
+      let mockNext = td.function();
+      let mockError = new Error('test-error');
+      let mockRequest = {
+        user: { id: 'test-id' },
+        body: { "name": "test-name" }
+      };
 
-      td.when(controller.User.findByIdAndRemove(mockRequest.params.id)).thenReturn(user);
-      td.when(mockResponse.send(user)).thenDo(() => done());
+      controller.User = { findByIdAndUpdateAsync: td.function() };
+      td.when(controller.User.findByIdAndUpdateAsync(mockRequest.user.id, mockRequest.body, { new: true }))
+        .thenReject(mockError);
 
-      controller.deleteUser(mockRequest, mockResponse, _.noop);
+      td.when(mockNext(Boom.wrap(mockError)))
+        .thenDo(() => { done() });
+
+      controller.updateUser(mockRequest, _.noop, mockNext);
     });
   });
 });
