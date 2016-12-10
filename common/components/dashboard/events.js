@@ -6,9 +6,9 @@ const Events = (props) => {
   const { events } = props
   return (
     <div className={css(styles.events)}>
-      <h2>User created events</h2>
+      <h2>Events currently active</h2>
       {
-        events.map((event) => <Event key={event._id}{...event} />)
+        events && events.map((event) => <Event key={event._id}{...event} />)
       }
     </div>
   )

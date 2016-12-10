@@ -1,40 +1,25 @@
 import React from 'react'
 import { css, StyleSheet } from 'aphrodite'
-import FacebookEvent from './facebook-event'
+import FacebookPage from './facebook-page'
 
-const events = [
-  {
-    name: 'Facebook event name 1',
-    id: '1283291831295'
-  },
-  {
-    name: 'Facebook event name 2',
-    id: '1232932433245'
-  },
-  {
-    name: 'Facebook event name 3',
-    id: '8908329084023'
-  },
-  {
-    name: 'Facebook event name 4',
-    id: '3490238409234809'
-  }
-]
-
-// will be passed a list of events in props
-const FacebookEvents = () => (
-  <div className={css(styles.events)}>
-    <h2>Facebook events</h2>
-    <p>Click to publish event</p>
-    {
-      events && events.map((event) => <FacebookEvent key={event.id} {...event} />)
-    }
-  </div>
-)
+const FacebookEvents = (props) => {
+  const { pages } = props
+  return (
+    <div className={css(styles.events)}>
+      <h2>Publish a new event</h2>
+      <p className={css(styles.subHeading)}>Create an event from one of your Facebook events</p>
+      {
+        pages && pages.length
+        ? pages && pages.map((page) => <FacebookPage key={page.id} {...page} />)
+        : <span>Looks like you don't have any Facebook pages</span>
+      }
+    </div>
+  )
+}
 
 const styles = StyleSheet.create({
-  events: {
-
+  subHeading: {
+    marginBottom: 0
   }
 })
 

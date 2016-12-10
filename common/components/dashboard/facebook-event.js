@@ -1,9 +1,11 @@
 import React from 'react'
 import { Link } from 'react-router'
 import { css, StyleSheet } from 'aphrodite'
+import moment from 'moment'
 
 const FacebookEvent = (props) => {
-  const { name, id } = props
+  const { name, id, start_time } = props
+  const date = moment(start_time).format('MMMM Do YYYY, h:mm:ss')
   return (
     <Link
       to={`/account/dashboard/newevent/${id}`}
@@ -12,7 +14,7 @@ const FacebookEvent = (props) => {
         className={css(styles.event)}>
         <div className={css(styles.eventText)}>
           <p>{name}</p>
-          <p>id: {id}</p>
+          <p>{date}</p>
         </div>
       </div>
     </Link>
@@ -24,18 +26,15 @@ const styles = StyleSheet.create({
     textDecoration: 'none'
   },
   event: {
-    height: '7em',
-    marginTop: 20,
+    marginTop: 30,
     cursor: 'pointer',
-    fontWeight: 'bold',
-    border: '2px solid #fff',
-    borderRadius: 10,
-    ':hover': {
-      border: '2px solid green'
-    }
+    fontWeight: 'bold'
   },
   eventText: {
-    color: '#2c8688'
+    color: '#2c8688',
+    ':hover': {
+      color: '#a81c13'
+    }
   }
 })
 
