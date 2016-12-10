@@ -15,7 +15,7 @@ import User from './models/user.model';
 const instantiation = () => {
   return {
     Events: new EventController ({ User, Event, Club }),
-    Clubs: new ClubController ({ Club }),
+    Clubs: new ClubController ({ User, Event, Club }),
     Users: new UserController ({ User, Event, Club })
   };
 };
