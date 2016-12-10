@@ -4,7 +4,7 @@ import { ensureLoggedIn } from 'connect-ensure-login';
 import BoomHandler from './middlewares/boom.middleware';
 import passport from './auth.init.js';
 
-import ClubController from './controllers/club.controller';
+import ClubController from './controllers/clubs.controller';
 import EventController from './controllers/events.controller';
 import UserController from './controllers/users.controller';
 
@@ -33,9 +33,9 @@ const Routing = () => {
     (req, res) => res.cookie('loggedin', true).cookie('user', 'User').redirect('/'));
 
   // User Routes
-  router.get('/users', ensureLoggedIn(), Controller.Users.getUser.bind(Controller.Users));
-  router.get('/users/dashboard', ensureLoggedIn(), Controllers.Users.dashboard.bind(Controllers.Users));
-  router.patch('/users', ensureLoggedIn(), Controller.Users.updateUser.bind(Controller.Users));
+  router.get('/users', ensureLoggedIn(), Controllers.Users.getUser.bind(Controllers.Users));
+  router.get('/users/dashboard', ensureLoggedIn(), Controllers.Users.getDashboard.bind(Controllers.Users));
+  router.patch('/users', ensureLoggedIn(), Controllers.Users.updateUser.bind(Controllers.Users));
 
   // Clubs Routes
   router.get('/clubs/pending', Controllers.Clubs.getPendingClubs.bind(Controllers.Clubs));
