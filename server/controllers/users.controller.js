@@ -16,57 +16,51 @@ function UserController(opts = {}) {
 }
 
 UserController.prototype.searchUser = function searchUser(req, res, next) {
-  return this.User.find()
-    .exec()
+  return this.User.findAsync(req.query)
     .then(users => res.send(users))
     .catch(() => next(Boom.notFound('No users found')));
 };
 
 UserController.prototype.getProfile = function getProfile(req, res, next) {
-  return this.User.findById(req.params.id)
-    .exec()
+  return this.User.findByIdAsync(req.params.id)
     .then(user => res.send(user))
     .catch(err => next(Boom.notFound('No user found')));
 };
 
 UserController.prototype.getUser = function getUser(req, res, next) {
-  return this.User.findById(req.params.id)
-    .exec()
+  return this.User.findByIdAsync(req.params.id)
     .then(user => res.send(user))
     .catch(() => next(Boom.notFound('User not found')));
 };
 
 UserController.prototype.updateUser = function updateUser(req, res, next) {
-  return this.User.findByIdAndUpdate(req.params.id, req.body, { new: true })
-    .exec()
+  return this.User.findByIdAndUpdateAsync(req.params.id, req.body, { new: true })
     .then(user => res.send(user))
     .catch(err => next(Boom.wrap(err)));
 };
 
 UserController.prototype.addVenue = function addVenue(req, res, next) {
-  const fb_id = req.user.fb_id;
   // TODO (sprada): Add check for admin users
-  return this.User.findOne({ fb_id })
-    .exec()
+  return this.User.findByIdAsync(req.user.id)
     .then(user => {
       return Promise.props({
         user,
-        venue: this.Venue.createAndSave(req.params)
+        venue: this.Venue.createAndSave(req.body)
       });
     })
     .then(({ user, venue }) => {
       user.venue = venue._id;
 
-      return user.save().exec()
+      return user.saveAsync()
     })
     .then(user => res.send(user))
     .catch(err => next(Boom.wrap(err)));
 };
 
 UserController.prototype.getVenue = function getVenue(req, res, next) {
-  return this.User.findById(req.params.id)
+  return this.User.findById(req.user.id)
     .populate('venue')
-    .exec()
+    .execAsync()
     .then(user => res.send(user))
     .catch(err => next(Boom.wrap(err)));
 };
@@ -74,7 +68,7 @@ UserController.prototype.getVenue = function getVenue(req, res, next) {
 UserController.prototype.dashBoard = function dashBoard(req, res, next) {
   return this.User.findById(req.user.id)
     .populate('venue')
-    .exec()
+    .execAsync()
     .then(user => {
       FB.setAccessToken(user.token);
       return Promise.props({

@@ -14,7 +14,7 @@ import User from './models/user.model';
 
 const instantiation = () => {
   return {
-    Events: new EventController ({ Event }),
+    Events: new EventController ({ User, Event, Venue }),
     Venues: new VenueController ({ Venue }),
     Users: new UserController ({ User, Event, Venue })
   };
@@ -27,7 +27,9 @@ const Routing = () => {
   // Event Routes
   router.get('/events/:id', Controllers.Events.getEvent.bind(Controllers.Events));
   router.get('/events', Controllers.Events.searchEvents.bind(Controllers.Events));
-  router.post('/events', Controllers.Events.createEvent.bind(Controllers.Events));
+
+  // Needs the user to have a Venue
+  router.post('/events', ensureLoggedIn(), Controllers.Events.createEvent.bind(Controllers.Events));
 
   // Facebook login
   router.get('/users/login', passport.authenticate('facebook', { scope: ['user_friends', 'manage_pages'] }));
@@ -40,6 +42,8 @@ const Routing = () => {
 
   // Adds venue under a User
   router.post('/users/venue', ensureLoggedIn(), Controllers.Users.addVenue.bind(Controllers.Users));
+  // Gets venue under a User
+  router.get('/users/venue', ensureLoggedIn(), Controllers.Users.getVenue.bind(Controllers.Users));
   // Gets user's venue populated
   router.get('/users/:id/venue', Controllers.Users.getVenue.bind(Controllers.Users));
   // Gets user's fbEvents, venue and pages
