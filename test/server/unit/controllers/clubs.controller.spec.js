@@ -2,8 +2,8 @@ import td from 'testdouble';
 import _ from 'lodash';
 import Boom from 'boom';
 
-import ClubController from '../../../server/controllers/clubs.controller';
-import Club from '../../../server/models/club.model';
+import ClubController from '../../../../server/controllers/clubs.controller';
+import Club from '../../../../server/models/club.model';
 
 describe('ClubController', () => {
   let controller;

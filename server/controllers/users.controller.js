@@ -30,7 +30,7 @@ UserController.prototype.updateUser = function updateUser(req, res, next) {
     .catch(err => next(Boom.wrap(err)));
 };
 
-UserController.prototype.dashBoard = function dashBoard(req, res, next) {
+UserController.prototype.getDashboard = function getDashboard(req, res, next) {
   return this.User.findById(req.user.id)
     .populate('club')
     .execAsync()
@@ -54,9 +54,9 @@ UserController.prototype.dashBoard = function dashBoard(req, res, next) {
         pages: _.map(pages, (page, i) => _.assign({}, page, { events: events[i].data }))
       };
 
-      res.send(entity);
+      return res.send(entity);
     })
-    .catch(err => res.send(err));
+    .catch(err => next(Boom.wrap(err)));
 };
 
 export default UserController;

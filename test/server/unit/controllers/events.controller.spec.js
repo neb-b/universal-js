@@ -3,7 +3,7 @@ import _ from 'lodash';
 import Boom from 'boom';
 import Promise from 'bluebird';
 
-import EventController from '../../../server/controllers/events.controller';
+import EventController from '../../../../server/controllers/events.controller';
 
 describe('UserController', () => {
   let controller;
