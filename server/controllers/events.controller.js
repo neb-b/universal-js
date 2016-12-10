@@ -7,7 +7,7 @@ function EventController(opts = {}) {
   }
 
   this.User = opts.User || {};
-  this.Venue = opts.Venue || {};
+  this.Club = opts.Club || {};
   this.Event = opts.Event || {};
 }
 
@@ -19,19 +19,19 @@ EventController.prototype.getEvent = function getEvent(req, res, next) {
 
 EventController.prototype.createEvent = function createEvent(req, res, next) {
     return this.User.findByIdAsync(req.user.id))
-    .then(user => this.Venue.findByIdAsync(user.venue))
-    .then(venue => {
-      if(!dbVenue){
-        return Promise.reject(Boom.preconditionFailed('You need to register a venue to create events'));
+    .then(user => this.Club.findByIdAsync(user.club))
+    .then(club => {
+      if(!club){
+        return Promise.reject(Boom.preconditionFailed('You need to register a club to create events'));
       }
 
-      return Promise.all([ venue, this.Event.createAndSave(req.body) ]);
+      return Promise.all([ club, this.Event.createAndSave(req.body) ]);
     })
-    .spread((venue, newEvent) => {
-      venue.createdEvents.push(newEvent._id);
-      return Promise.all([ venue.saveAsync(), newEvent ])
+    .spread((club, newEvent) => {
+      club.createdEvents.push(newEvent._id);
+      return Promise.all([ club.saveAsync(), newEvent ])
     })
-    .spread((venue, newEvent) => res.send(newEvent))
+    .spread((club, newEvent) => res.send(newEvent))
     .catch(err => next(Boom.wrap(err)));
 };
 

@@ -3,17 +3,17 @@ import mongoose from 'mongoose';
 
 const Schema = mongoose.Schema;
 
-const VenueSchema = new Schema({
+const ClubSchema = new Schema({
   name: { type: 'String', required: false },
   fbEvents: [{ type: 'String', required: false }],
   createdEvents: [{ type: Schema.Types.ObjectId, ref: 'Event' }],
   dateAdded: { type: 'Date', default: Date.now, required: true },
 });
 
-VenueSchema.statics.createAndSave = Promise.method(function(props) {
-  let newVenue = new VenueModel(props);
+ClubSchema.statics.createAndSave = Promise.method(function(props) {
+  let newClub = new ClubModel(props);
 
-  newVenue.save((err, result) => {
+  newClub.save((err, result) => {
     if(err) {
       throw new Error(err);
     }
@@ -21,9 +21,9 @@ VenueSchema.statics.createAndSave = Promise.method(function(props) {
     return result;
   });
 
-  return newVenue;
+  return newClub;
 });
 
-const VenueModel = mongoose.model('Venue', VenueSchema);
+const ClubModel = mongoose.model('Club', ClubSchema);
 
-export default VenueModel;
+export default ClubModel;

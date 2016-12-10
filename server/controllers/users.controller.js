@@ -11,7 +11,7 @@ function UserController(opts = {}) {
   }
 
   this.User = opts.User || {};
-  this.Venue = opts.Venue || {};
+  this.Club = opts.Club || {};
   this.Event = opts.Event || {};
 }
 
@@ -27,17 +27,17 @@ UserController.prototype.updateUser = function updateUser(req, res, next) {
     .catch(err => next(Boom.wrap(err)));
 };
 
-UserController.prototype.addVenue = function addVenue(req, res, next) {
+UserController.prototype.addClub = function addClub(req, res, next) {
   // TODO (sprada): Add check for admin users
   return this.User.findByIdAsync(req.user.id)
     .then(user => {
       return Promise.props({
         user,
-        venue: this.Venue.createAndSave(req.body)
+        club: this.Club.createAndSave(req.body)
       });
     })
-    .then(({ user, venue }) => {
-      user.venue = venue._id;
+    .then(({ user, club }) => {
+      user.club = club._id;
 
       return user.saveAsync()
     })
@@ -45,9 +45,9 @@ UserController.prototype.addVenue = function addVenue(req, res, next) {
     .catch(err => next(Boom.wrap(err)));
 };
 
-UserController.prototype.getVenue = function getVenue(req, res, next) {
+UserController.prototype.getClub = function getClub(req, res, next) {
   return this.User.findById(req.user.id)
-    .populate('venue')
+    .populate('club')
     .execAsync()
     .then(user => res.send(user))
     .catch(err => next(Boom.wrap(err)));
@@ -55,7 +55,7 @@ UserController.prototype.getVenue = function getVenue(req, res, next) {
 
 UserController.prototype.dashBoard = function dashBoard(req, res, next) {
   return this.User.findById(req.user.id)
-    .populate('venue')
+    .populate('club')
     .execAsync()
     .then(user => {
       FB.setAccessToken(user.token);

@@ -10,7 +10,7 @@ const UserSchema = new Schema({
   token: { type: 'String', required: false },
   ak_id: { type: 'String', required: false },
   admin: { type: 'Boolean', default: false, required: true },
-  venue: { type: Schema.Types.ObjectId, ref: 'Venue' },
+  club: { type: Schema.Types.ObjectId, ref: 'Club' },
   dateAdded: { type: 'Date', default: Date.now, required: true },
   eventsInterested: [ { type: Schema.Types.ObjectId, ref:'Event'}]
 });
