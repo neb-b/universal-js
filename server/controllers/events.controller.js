@@ -14,11 +14,11 @@ function EventController(opts = {}) {
 EventController.prototype.getEvent = function getEvent(req, res, next) {
   return this.Event.findByIdAsync(req.params.id)
     .then(event => res.send(event))
-    .catch(() => next(Boom.notFound('Event not found')));
+    .catch(err => next(Boom.wrap(err)));
 };
 
 EventController.prototype.createEvent = function createEvent(req, res, next) {
-    return this.User.findByIdAsync(req.user.id))
+    return this.User.findByIdAsync(req.user.id)
     .then(user => this.Club.findByIdAsync(user.club))
     .then(club => {
       if(!club){
@@ -28,7 +28,7 @@ EventController.prototype.createEvent = function createEvent(req, res, next) {
       return Promise.all([ club, this.Event.createAndSave(req.body) ]);
     })
     .spread((club, newEvent) => {
-      club.createdEvents.push(newEvent._id);
+      club.events.push(newEvent._id);
       return Promise.all([ club.saveAsync(), newEvent ])
     })
     .spread((club, newEvent) => res.send(newEvent))
@@ -41,11 +41,12 @@ EventController.prototype.updateEvent = function updateEvent(req, res, next) {
     .catch(err => next(Boom.wrap(err)));
 };
 
-EventController.prototype.deleteEvent = function deleteEvent(req, res, next) {
-  return this.Event.findByIdAndRemoveAsync(req.params.id)
-    .then(event => res.send(event))
-    .catch(err => next(Boom.wrap(err)));
+EventController.prototype.getFBEvent = function getFBEvent(req, res, next) {
+  // body...
 };
 
+EventController.prototype.purchaseTicket = function purchaseTicket(req, res, next) {
+  // body...
+};
 
 export default EventController;
