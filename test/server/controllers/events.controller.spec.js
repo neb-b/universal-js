@@ -1,6 +1,7 @@
 import td from 'testdouble';
 import _ from 'lodash';
 import Boom from 'boom';
+import Promise from 'bluebird';
 
 import EventController from '../../../server/controllers/events.controller';
 
@@ -42,7 +43,7 @@ describe('UserController', () => {
     });
   });
 
-  context.skip('createEvent', () => {
+  context('createEvent', () => {
     it('returns created event', (done) => {
       let mockReq = { user: { id: 'test-user-id'}, body: { name: 'test-party', foo: 'bar' } };
       let mockRes = { send: td.function() };
@@ -52,7 +53,7 @@ describe('UserController', () => {
 
       controller.User = { findByIdAsync: td.function() };
       td.when(controller.User.findByIdAsync('test-user-id'))
-        .thenResolve(mockUser);
+        .thenReturn(Promise.resolve(mockUser));
 
       controller.Club = { findByIdAsync: td.function() };
       td.when(controller.Club.findByIdAsync('test-club-id'))
@@ -60,10 +61,10 @@ describe('UserController', () => {
 
       controller.Event = { createAndSave: td.function() };
       td.when(controller.Event.createAndSave({ name: 'test-party', foo: 'bar' }))
-        .thenReturn(mockEvent);
+        .thenReturn(Promise.resolve(mockEvent));
 
       td.when(mockClub.saveAsync())
-        .thenResolve(mockClub);
+        .thenReturn(Promise.resolve(mockClub));
 
       td.when(mockRes.send(mockEvent))
         .thenDo(() => { done() });
@@ -71,13 +72,147 @@ describe('UserController', () => {
       controller.createEvent(mockReq, mockRes, _.noop);
     });
 
-    it('rejects for a user with no club', () => {});
+    it('rejects for a user with no club', (done) => {
+      let mockReq = { user: { id: 'test-user-id'}, body: { name: 'test-party', foo: 'bar' } };
+      let mockNext = td.function();
+      let mockUser = { name: 'sean' };
+      let mockError = Boom.preconditionFailed('You need to register a club to create events');
 
-    it('handles other errors', () => {});
+      controller.User = { findByIdAsync: td.function() };
+      td.when(controller.User.findByIdAsync('test-user-id'))
+        .thenReturn(Promise.resolve(mockUser));
+
+      controller.Club = { findByIdAsync: td.function() };
+      td.when(controller.Club.findByIdAsync('test-club-id'))
+        .thenResolve(null);
+
+      td.when(mockNext(mockError))
+        .thenDo(() => { done() });
+
+      controller.createEvent(mockReq, _.noop, mockNext);
+    });
+
+    it('handles other errors', (done) => {
+      let mockReq = { user: { id: 'test-user-id'}, body: { name: 'test-party', foo: 'bar' } };
+      let mockNext = td.function();
+      let mockUser = { name: 'sean' };
+      let mockError = new Error('test-error');
+
+      controller.User = { findByIdAsync: td.function() };
+      td.when(controller.User.findByIdAsync('test-user-id'))
+        .thenReturn(Promise.reject(mockError));
+
+      td.when(mockNext(Boom.wrap(mockError)))
+        .thenDo(() => { done() });
+
+      controller.createEvent(mockReq, _.noop, mockNext);
+    });
   });
 
   context('updateEvent', () => {
+    it('returns edited event', (done) => {
+      let mockReq = {
+        user: { id: 'test-user-id' },
+        params: { id: 'test-event-id' },
+        body: { name: 'test-name'}
+      };
+      let mockRes = { send: td.function() };
+      let mockUser = { _id: 'test-user-id', club: 'test-club-id' };
+      let mockClub = { _id: 'test-club-id', events: ['test-event-id'], foo: 'bar' };
+      let mockEvent = { _id: 'test-event-id', name: 'test-name' };
 
+      controller.User = { findByIdAsync: td.function() };
+      td.when(controller.User.findByIdAsync('test-user-id'))
+        .thenReturn(Promise.resolve(mockUser));
+
+      controller.Club = { findByIdAsync: td.function() };
+      td.when(controller.Club.findByIdAsync('test-club-id'))
+        .thenReturn(Promise.resolve(mockClub));
+
+      controller.Event = { findByIdAndUpdateAsync: td.function() };
+      td.when(controller.Event.findByIdAndUpdateAsync('test-event-id', { name: 'test-name'}, { new: true }))
+        .thenReturn(Promise.resolve(mockEvent));
+
+      td.when(mockRes.send(mockEvent))
+        .thenDo(() => { done() });
+
+      controller.updateEvent(mockReq, mockRes, _.noop);
+    });
+
+    it('rejects if user has no club', (done) => {
+      let mockReq = {
+        user: { id: 'test-user-id' },
+        params: { id: 'test-event-id' },
+        body: { name: 'test-name'}
+      };
+      let mockNext = td.function();
+      let mockUser = { _id: 'test-user-id' };
+      let mockError = Boom.preconditionFailed('You need to register a club to edit events');
+
+      controller.User = { findByIdAsync: td.function() };
+      td.when(controller.User.findByIdAsync('test-user-id'))
+        .thenReturn(Promise.resolve(mockUser));
+
+      td.when(mockNext(mockError))
+        .thenDo(() => { done() });
+
+      controller.updateEvent(mockReq, _.noop, mockNext);
+    });
+
+    it('rejects if user has no event with that id', (done) => {
+      let mockReq = {
+        user: { id: 'test-user-id' },
+        params: { id: 'test-event-id' },
+        body: { name: 'test-name'}
+      };
+      let mockNext = td.function();
+      let mockUser = { _id: 'test-user-id', club: 'test-club-id' };
+      let mockClub = { _id: 'test-club-id', events:[] };
+      let mockError = Boom.preconditionFailed('No event with that id in your club');
+
+      controller.User = { findByIdAsync: td.function() };
+      td.when(controller.User.findByIdAsync('test-user-id'))
+        .thenReturn(Promise.resolve(mockUser));
+
+      controller.Club = { findByIdAsync: td.function() };
+      td.when(controller.Club.findByIdAsync('test-club-id'))
+        .thenReturn(Promise.resolve(mockClub));
+
+      td.when(mockNext(mockError))
+        .thenDo(() => { done() });
+
+      controller.updateEvent(mockReq, _.noop, mockNext);
+    });
+
+    it('handles server errors', (done) => {
+      let mockReq = {
+        user: { id: 'test-user-id' },
+        params: { id: 'test-event-id' },
+        body: { name: 'test-name'}
+      };
+      let mockNext = td.function();
+      let mockUser = { _id: 'test-user-id', club: 'test-club-id' };
+      let mockClub = { _id: 'test-club-id', events:['test-event-id'] };
+      let mockEvent = { _id: 'test-event-id' }
+      let mockError = new Error('test-error');
+
+      controller.User = { findByIdAsync: td.function() };
+      td.when(controller.User.findByIdAsync('test-user-id'))
+        .thenReturn(Promise.resolve(mockUser));
+
+      controller.Club = { findByIdAsync: td.function() };
+      td.when(controller.Club.findByIdAsync('test-club-id'))
+        .thenReturn(Promise.resolve(mockClub));
+
+      controller.Event = { findByIdAndUpdateAsync: td.function() };
+      td.when(controller.Event.findByIdAndUpdateAsync('test-event-id', { name: 'test-name'}, { new: true }))
+        .thenReturn(Promise.reject(mockError));
+
+      td.when(mockNext(Boom.wrap(mockError)))
+        .thenDo(() => { done() });
+
+      controller.updateEvent(mockReq, _.noop, mockNext);
+    });
   });
 
   context('getFBEvent', () => {

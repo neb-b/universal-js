@@ -1,5 +1,6 @@
 import Promise from 'bluebird';
 import Boom from 'boom';
+import _ from 'lodash';
 
 function EventController(opts = {}) {
   if (!(this instanceof EventController)) {
@@ -36,7 +37,25 @@ EventController.prototype.createEvent = function createEvent(req, res, next) {
 };
 
 EventController.prototype.updateEvent = function updateEvent(req, res, next) {
-  return this.Event.findByIdAndUpdateAsync(req.params.id, req.body, { new: true })
+  return this.User.findByIdAsync(req.user.id)
+    .then(user => this.Club.findByIdAsync(user.club))
+    .then(club => {
+      if(!club){
+        return Promise.reject(Boom.preconditionFailed('You need to register a club to edit events'));
+      }
+
+      return Promise.all([
+        _.indexOf(club.events, req.params.id),
+        club
+      ]);
+    })
+    .spread((eventIndex, club) => {
+      if(eventIndex === -1){
+        return Promise.reject(Boom.preconditionFailed('No event with that id in your club'));
+      }
+
+      return this.Event.findByIdAndUpdateAsync(club.events[eventIndex], req.body, { new: true })
+    })
     .then(event => res.send(event))
     .catch(err => next(Boom.wrap(err)));
 };
