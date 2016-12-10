@@ -5,7 +5,7 @@ import FacebookEvents from './dashboard/facebook-events'
 import Events from './dashboard/events'
 
 const Dashboard = (props) => {
-  console.log('props?', props);
+  console.log('props?', props)
   const { loading, error, events } = props
   return (
     <div>

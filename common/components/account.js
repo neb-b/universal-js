@@ -1,18 +1,36 @@
-import React from 'react'
+import React, { Component } from 'react'
 import { StyleSheet, css } from 'aphrodite'
 import { Link } from 'react-router'
+import NewUserModal from './account/modal'
 
-const Account = (props) => (
-  <div>
-    <p className={css(styles.lead)}>
-      This is where all venue account actions happen.
-    </p>
-    <Link to='account/dashboard'>
-      <div className={css(styles.button)}>View Event Dashboard</div>
-    </Link>
-    <p>show this link only if they are venues</p>
-  </div>
-)
+class Account extends Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      modalVisible: props.newUser
+    }
+  }
+
+  toggleModal () {
+    this.setState({
+      modalVisible: !this.state.modalVisible
+    })
+  }
+
+  render () {
+    return (
+      <div>
+        {
+          this.state.modalVisible && <NewUserModal toggleModal={this.toggleModal.bind(this)} />
+        }
+        <Link to='account/dashboard'>
+          <div className={css(styles.button)}>View Event Dashboard</div>
+        </Link>
+        <p>show this link only if they are venues</p>
+      </div>
+    )
+  }
+}
 
 const styles = StyleSheet.create({
   lead: {
