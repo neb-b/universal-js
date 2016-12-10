@@ -5,8 +5,9 @@ const Schema = mongoose.Schema;
 
 const ClubSchema = new Schema({
   name: { type: 'String', required: false },
+  pending: { type: 'Boolean', required: true, default: false },
   fbEvents: [{ type: 'String', required: false }],
-  createdEvents: [{ type: Schema.Types.ObjectId, ref: 'Event' }],
+  events: [{ type: Schema.Types.ObjectId, ref: 'Event' }],
   dateAdded: { type: 'Date', default: Date.now, required: true },
 });
 

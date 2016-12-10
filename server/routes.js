@@ -34,8 +34,14 @@ const Routing = () => {
 
   // User Routes
   router.get('/users', ensureLoggedIn(), Controller.Users.getUser.bind(Controller.Users));
-  router.patch('/users', ensureLoggedIn(), Controller.Users.getUser.bind(Controller.Users));
   router.get('/users/dashboard', ensureLoggedIn(), Controllers.Users.dashboard.bind(Controllers.Users));
+  router.patch('/users', ensureLoggedIn(), Controller.Users.updateUser.bind(Controller.Users));
+
+  // Clubs Routes
+  router.get('/clubs/pending', Controllers.Clubs.getPendingClubs.bind(Controllers.Clubs));
+  router.get('/clubs/:id', Controllers.Clubs.getClub.bind(Controllers.Clubs));
+  router.patch('/clubs', ensureLoggedIn(), Controllers.Clubs.updateClub.bind(Controllers.Clubs));
+  router.post('/clubs', ensureLoggedIn(), Controllers.Clubs.createClub.bind(Controllers.Clubs));
 
   // Event Routes
   router.get('/events/fb/:id', Controllers.Events.getFBEvent.bind(Controllers.Events));
@@ -43,12 +49,6 @@ const Routing = () => {
   router.patch('/events/:id', Controllers.Events.updateEvent.bind(Controllers.Events));
   router.post('/events', Controllers.Events.createEvent.bind(Controllers.Events));
   router.post('/events/:id/purchase', Controllers.Events.purchaseTicket.bind(Controllers.Events));
-
-  // Clubs Routes
-  router.get('/clubs/pending', Controllers.Clubs.getClub.bind(Controllers.Clubs));
-  router.patch('/clubs', Controllers.Clubs.updateClub.bind(Controllers.Clubs));
-  router.post('/clubs', ensureLoggedIn(), Controllers.Clubs.createClub.bind(Controllers.Clubs));
-  router.get('/clubs/:id', Controllers.Clubs.getClub.bind(Controllers.Clubs));
 
   router.use(BoomHandler);
 

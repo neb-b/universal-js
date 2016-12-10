@@ -16,39 +16,16 @@ function UserController(opts = {}) {
 }
 
 UserController.prototype.getUser = function getUser(req, res, next) {
-  return this.User.findByIdAsync(req.params.id)
-    .then(user => res.send(user))
-    .catch(() => next(Boom.notFound('User not found')));
-};
-
-UserController.prototype.updateUser = function updateUser(req, res, next) {
-  return this.User.findByIdAndUpdateAsync(req.params.id, req.body, { new: true })
-    .then(user => res.send(user))
-    .catch(err => next(Boom.wrap(err)));
-};
-
-UserController.prototype.addClub = function addClub(req, res, next) {
-  // TODO (sprada): Add check for admin users
-  return this.User.findByIdAsync(req.user.id)
-    .then(user => {
-      return Promise.props({
-        user,
-        club: this.Club.createAndSave(req.body)
-      });
-    })
-    .then(({ user, club }) => {
-      user.club = club._id;
-
-      return user.saveAsync()
-    })
-    .then(user => res.send(user))
-    .catch(err => next(Boom.wrap(err)));
-};
-
-UserController.prototype.getClub = function getClub(req, res, next) {
   return this.User.findById(req.user.id)
     .populate('club')
     .execAsync()
+    .then(user => res.send(user))
+    .catch((err) => next(Boom.wrap(err)));
+};
+
+// TODO(sprada): Figure out what is updatable
+UserController.prototype.updateUser = function updateUser(req, res, next) {
+  return this.User.findByIdAndUpdateAsync(req.user.id, req.body, { new: true })
     .then(user => res.send(user))
     .catch(err => next(Boom.wrap(err)));
 };
