@@ -2,6 +2,9 @@ import Promise from 'bluebird';
 import Boom from 'boom';
 import _ from 'lodash';
 
+import FB from 'fbgraph';
+Promise.promisifyAll(FB);
+
 function EventController(opts = {}) {
   if (!(this instanceof EventController)) {
     return new EventController(opts);
@@ -61,7 +64,15 @@ EventController.prototype.updateEvent = function updateEvent(req, res, next) {
 };
 
 EventController.prototype.getFBEvent = function getFBEvent(req, res, next) {
-  // body...
+  console.log(req.user.id);
+  console.log(req.user.id);
+  console.log(req.user.id);
+  return this.User.findByIdAsync(req.user.id)
+    .then(user => {
+      FB.setAccessToken(user.token);
+      
+      return FB.getAsync('me/accounts');
+    })
 };
 
 EventController.prototype.purchaseTicket = function purchaseTicket(req, res, next) {
