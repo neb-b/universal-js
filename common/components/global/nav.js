@@ -1,8 +1,10 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import IndexLink from 'react-router/lib/IndexLink'
 import Link from 'react-router/lib/Link'
 import cookie from 'react-cookie'
 import { StyleSheet, css } from 'aphrodite'
+import { logout } from '../../redux/action-creators/logout'
 
 const Nav = () => {
   const loggedIn = cookie.load('loggedin')
@@ -25,7 +27,15 @@ const Nav = () => {
       </Link>
       {
         loggedIn
-        ? <span className={css(styles.activeLink, styles.greeting)}>Hello {name}</span>
+        ? [
+          <span className={css(styles.activeLink, styles.greeting)}>Hello {name}</span>,
+          <span
+            onClick={logout}
+            className={css(styles.link)}
+            activeClassName={css(styles.link, styles.activeLink)}>
+              Logout
+          </span>
+        ]
         : <Link
           to='/login'
           className={css(styles.link)}
@@ -48,12 +58,14 @@ const styles = StyleSheet.create({
     transition: '.2s opacity ease',
     ':hover': {
       opacity: 0.6
-    }
+    },
+    cursor: 'pointer'
   },
   activeLink: {
     color: '#000'
   },
   greeting: {
+    margin: '1.5rem 1rem 1.5rem 0',
     fontWeight: 'bold'
   },
   fakeButton: {
@@ -68,4 +80,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default Nav
+export default connect(null, { logout })(Nav)

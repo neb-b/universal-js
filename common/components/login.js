@@ -16,7 +16,7 @@ const Login = () => (
 
 const styles = StyleSheet.create({
   login: {
-    paddingTop: 100,
+    paddingTop: 100
   },
   button: {
     width: '50%',
