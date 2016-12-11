@@ -7,7 +7,13 @@ import {
 const initialState = {
   loading: false,
   error: null,
-  events: {}
+  dashboard: {
+    user: {
+      club: {
+        events: []
+      }
+    }
+  }
 }
 
 export default function dashboard (state = initialState, action) {
@@ -18,7 +24,7 @@ export default function dashboard (state = initialState, action) {
         error: null}
     case LOAD_DASHBOARD_SUCCESS:
       return { ...state,
-        events: action.payload,
+        dashboard: action.payload,
         loading: false}
     case LOAD_DASHBOARD_ERROR:
       return { ...state,

@@ -1,21 +1,23 @@
 import React from 'react'
-// import { StyleSheet, css } from 'aphrodite'
-import { Container, Col } from 'react-grid-system'
+import { StyleSheet, css } from 'aphrodite'
+import { Container, Row, Col } from 'react-grid-system'
 import FacebookEvents from './dashboard/facebook-events'
 import Events from './dashboard/events'
 
 const Dashboard = (props) => {
-  console.log('props?', props)
-  const { loading, error, events } = props
+  const { loading, error, dashboard } = props
+  const { user: { club: { events } } } = dashboard
   return (
-    <div>
+    <div className={css(styles.dashboard)}>
       <p>View/edit created events, add events from facebook</p>
       { error && <div>There has been an error</div> }
       {
-        !loading && (
+        !loading && dashboard && (
           <Container>
-            <Col sm={6}><FacebookEvents pages={events.pages} /></Col>
-            <Col sm={6}><Events events={events.userEvents} /></Col>
+            <Row>
+              <Col sm={6}><FacebookEvents pages={dashboard.pages} /></Col>
+              <Col sm={6}><Events events={events} /></Col>
+            </Row>
           </Container>
         )
       }
@@ -23,10 +25,8 @@ const Dashboard = (props) => {
   )
 }
 
-// const styles = StyleSheet.create({
-//   dashboard: {
-//
-//   }
-// })
+const styles = StyleSheet.create({
+
+})
 
 export default Dashboard

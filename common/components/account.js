@@ -3,14 +3,14 @@ import { StyleSheet, css } from 'aphrodite'
 import { Link } from 'react-router'
 
 const Account = (props) => {
-  const { account: { name, venue } } = props
+  const { account: { name, club } } = props
   return (
     <div>
       <div className={css(styles.info)}>
         <h3>Name: { name }</h3>
       </div>
       {
-        venue && (
+        club && (
           <Link to='account/dashboard'>
             <div className={css(styles.button)}>View Event Dashboard</div>
           </Link>
