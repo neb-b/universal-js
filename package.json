@@ -8,7 +8,8 @@
     "coverage": "nyc npm test",
     "start": "cross-env NODE_ENV=development node -r 'babel-register' ./server",
     "build": "webpack -p --config ./tools/webpack.client.prod.js && webpack -p --config ./tools/webpack.server.prod.js",
-    "clean": "rm -rf build"
+    "clean": "rm -rf build",
+    "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls"
   },
   "repository": {
     "type": "git",
@@ -85,6 +86,8 @@
     "babel-plugin-istanbul": "^2.0.0",
     "chai": "^3.5.0",
     "chai-http": "^3.0.0",
+    "coveralls": "^2.11.15",
+    "istanbul": "^0.4.5",
     "mocha": "^3.0.2",
     "nyc": "^8.1.0"
   },
