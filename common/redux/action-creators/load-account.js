@@ -8,7 +8,7 @@ import {
 export function loadAccount (id) {
   return (dispatch, getState, { axios }) => {
     dispatch({ type: LOAD_ACCOUNT_REQUEST })
-    return axios.post(`${ROOT_URL}/clubs`)
+    return axios.get(`${ROOT_URL}/users`)
       .then(res => {
         dispatch(createAction(LOAD_ACCOUNT_SUCCESS, res.data))
       })

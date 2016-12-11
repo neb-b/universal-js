@@ -5,7 +5,7 @@ const Home = (props) => (
   <div>
     <h2 className={css(styles.header)}>Home</h2>
     <p className={css(styles.lead)}>
-      This is the home page
+      The easiest way to sell tickets to club events
     </p>
   </div>
 )
