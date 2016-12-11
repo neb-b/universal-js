@@ -28,11 +28,14 @@ const Nav = () => {
       {
         loggedIn
         ? [
-          <span className={css(styles.activeLink, styles.greeting)}>Hello {name}</span>,
           <span
+            key={1}
+            className={css(styles.activeLink, styles.greeting)}>
+            Hello {name}</span>,
+          <span
+            key={2}
             onClick={logout}
-            className={css(styles.link)}
-            activeClassName={css(styles.link, styles.activeLink)}>
+            className={css(styles.link)}>
               Logout
           </span>
         ]
