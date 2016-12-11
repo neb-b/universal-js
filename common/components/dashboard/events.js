@@ -4,11 +4,14 @@ import Event from './event'
 
 const Events = (props) => {
   const { events } = props
+
   return (
     <div className={css(styles.events)}>
-      <h2>Events currently active</h2>
+      <h2>Future events</h2>
       {
-        events && events.map((event) => <Event key={event._id}{...event} />)
+        events.length
+        ? events.map((event) => <Event event={event} />)
+        : <p>You do not have any created events</p>
       }
     </div>
   )

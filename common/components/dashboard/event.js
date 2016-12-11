@@ -2,13 +2,11 @@ import React from 'react'
 import { Link } from 'react-router'
 import { StyleSheet, css } from 'aphrodite'
 
-const Event = (props) => {
-  const { name, dateAdded, _id } = props
+const Event = ({event}) => {
   return (
-    <div key={dateAdded} className={css(styles.event)}>
-      <Link to={`/venues/123/events/${_id}`}>
-        <h3>{name}</h3>
-        <p>Created at: {dateAdded}</p>
+    <div className={css(styles.event)}>
+      <Link to={`/venues/123/events/${event}`}>
+        <h3 className={css(styles.eventText)}>Event id: {event}</h3>
       </Link>
     </div>
   )
@@ -16,9 +14,11 @@ const Event = (props) => {
 
 const styles = StyleSheet.create({
   event: {
-    textDecoration: 'none',
-    border: '1px solid black',
-    marginTop: 20
+    textDecoration: 'none'
+  },
+  eventText: {
+    color: '#060606',
+    paddingTop: 15
   }
 })
 
