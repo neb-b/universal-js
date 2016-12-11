@@ -15,7 +15,7 @@
     "url": "git+https://github.com/seanyesmunt/universal-js.git"
   },
   "keywords": [],
-  "author": "sean yesmunt",
+  "author": "sean yesmunt & sergio prada",
   "license": "MIT",
   "dependencies": {
     "aphrodite": "^1.1.0",
