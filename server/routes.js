@@ -32,6 +32,13 @@ const Routing = () => {
     passport.authenticate('facebook', { failureRedirect: '/' }),
     (req, res) => res.cookie('loggedin', true).cookie('user', 'User').redirect('/'));
 
+  router.get('/users/logout', ensureLoggedIn(),
+    (req, res) => {
+      res.clearCookie('loggedin').clearCookie('user');
+      req.logOut();
+      return res.redirect('/');
+    });
+
   // User Routes
   router.get('/users', ensureLoggedIn(), Controllers.Users.getUser.bind(Controllers.Users));
   router.get('/users/dashboard', ensureLoggedIn(), Controllers.Users.getDashboard.bind(Controllers.Users));
