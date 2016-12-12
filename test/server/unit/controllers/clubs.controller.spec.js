@@ -158,7 +158,7 @@ describe('ClubController', () => {
       controller.getPendingClubs(mockRequest, mockResponse, _.noop);
     });
 
-    it('handles server error', () => {
+    it('handles server error', (done) => {
       let mockRequest = { user: { id: 'test-id' } };
       let mockNext = td.function();
       let mockError = new Error('test-error');
