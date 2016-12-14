@@ -32,7 +32,7 @@ const Routing = () => {
     passport.authenticate('facebook', { failureRedirect: '/' }),
     (req, res) => res.cookie('loggedin', true).cookie('user', 'User').redirect('/'));
 
-  router.get('/logout', ensureLoggedIn(),
+  router.get('/logout',
     (req, res) => {
       res.clearCookie('loggedin').clearCookie('user');
       req.logOut();
