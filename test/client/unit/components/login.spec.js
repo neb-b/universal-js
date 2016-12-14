@@ -7,4 +7,9 @@ describe('<Login />', () => {
     const wrapper = shallow(<Login />)
     expect(wrapper).to.have.length(1)
   })
+
+  it('has a login button', () => {
+    const wrapper = shallow(<Login />)
+    expect(wrapper.find('.login-button')).to.have.length(1)
+  })
 })
