@@ -25,14 +25,14 @@ const Routing = () => {
   const Controllers = instantiation();
 
   // Login Routes
-  router.get('/users/login',
+  router.get('/api/users/login',
     passport.authenticate('facebook', { scope: ['user_friends', 'manage_pages'] }));
 
-  router.get('/users/login/callback',
+  router.get('/api/users/login/callback',
     passport.authenticate('facebook', { failureRedirect: '/' }),
     (req, res) => res.cookie('loggedin', true).cookie('user', 'User').redirect('/'));
 
-  router.get('/users/logout', ensureLoggedIn(),
+  router.get('/logout',
     (req, res) => {
       res.clearCookie('loggedin').clearCookie('user');
       req.logOut();
@@ -40,22 +40,22 @@ const Routing = () => {
     });
 
   // User Routes
-  router.get('/users', ensureLoggedIn(), Controllers.Users.getUser.bind(Controllers.Users));
-  router.get('/users/dashboard', ensureLoggedIn(), Controllers.Users.getDashboard.bind(Controllers.Users));
-  router.patch('/users', ensureLoggedIn(), Controllers.Users.updateUser.bind(Controllers.Users));
+  router.get('/api/users', ensureLoggedIn(), Controllers.Users.getUser.bind(Controllers.Users));
+  router.get('/api/users/dashboard', ensureLoggedIn(), Controllers.Users.getDashboard.bind(Controllers.Users));
+  router.patch('/api/users', ensureLoggedIn(), Controllers.Users.updateUser.bind(Controllers.Users));
 
   // Clubs Routes
-  router.get('/clubs/pending', Controllers.Clubs.getPendingClubs.bind(Controllers.Clubs));
-  router.get('/clubs/:id', Controllers.Clubs.getClub.bind(Controllers.Clubs));
-  router.patch('/clubs', ensureLoggedIn(), Controllers.Clubs.updateClub.bind(Controllers.Clubs));
-  router.post('/clubs', ensureLoggedIn(), Controllers.Clubs.createClub.bind(Controllers.Clubs));
+  router.get('/api/clubs/pending', Controllers.Clubs.getPendingClubs.bind(Controllers.Clubs));
+  router.get('/api/clubs/:id', Controllers.Clubs.getClub.bind(Controllers.Clubs));
+  router.patch('/api/clubs', ensureLoggedIn(), Controllers.Clubs.updateClub.bind(Controllers.Clubs));
+  router.post('/api/clubs', ensureLoggedIn(), Controllers.Clubs.createClub.bind(Controllers.Clubs));
 
   // Event Routes
-  router.get('/events/fb/:id', Controllers.Events.getFBEvent.bind(Controllers.Events));
-  router.get('/events/:id', Controllers.Events.getEvent.bind(Controllers.Events));
-  router.patch('/events/:id', Controllers.Events.updateEvent.bind(Controllers.Events));
-  router.post('/events', Controllers.Events.createEvent.bind(Controllers.Events));
-  router.post('/events/:id/purchase', Controllers.Events.purchaseTicket.bind(Controllers.Events));
+  router.get('/api/events/fb/:id', Controllers.Events.getFBEvent.bind(Controllers.Events));
+  router.get('/api/events/:id', Controllers.Events.getEvent.bind(Controllers.Events));
+  router.patch('/api/events/:id', Controllers.Events.updateEvent.bind(Controllers.Events));
+  router.post('/api/events', Controllers.Events.createEvent.bind(Controllers.Events));
+  router.post('/api/events/:id/purchase', Controllers.Events.purchaseTicket.bind(Controllers.Events));
 
   router.use(BoomHandler);
 

@@ -66,7 +66,7 @@ export const createServer = (config) => {
   app.use(passport.initialize());
   app.use(passport.session());
   // Api routing
-  app.use('/api', Routing())
+  app.use('/', Routing())
 
   app.get('*', (req, res) => {
     const store = configureStore({
