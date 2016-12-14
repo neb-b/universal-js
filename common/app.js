@@ -1,7 +1,7 @@
 import React from 'react'
 import Helmet from 'react-helmet'
-import Nav from './global/nav'
-import Footer from './global/footer'
+import Nav from './components/global/nav'
+import Footer from './components/global/footer'
 import { StyleSheet, css } from 'aphrodite'
 
 const App = ({ children }) => (

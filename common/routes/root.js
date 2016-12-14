@@ -1,7 +1,7 @@
 // polyfill webpack require.ensure
 if (typeof require.ensure !== 'function') require.ensure = (d, c) => c(require)
 
-import App from '../components/app'
+import App from '../app'
 import Home from '../components/home'
 
 export default function createRoutes (store) {
