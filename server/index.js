@@ -204,13 +204,13 @@ export const createServer = (config) => {
 
 export const startServer = (serverConfig) => {
   const config =  {...DefaultServerConfig, ...serverConfig}
-  
-  // Mongo instance
-  db(config.mongoUrl);
 
   const server = createServer(config)
   server.listen(config.port, (err) => {
     if (config.nodeEnv === 'production' || config.nodeEnv === 'test') {
+      // Mongo instance
+      db(config.mongoUrl);
+
       if (err) console.log(err)
       console.log(`server ${config.id} listening on port ${config.port}`)
     } else {
