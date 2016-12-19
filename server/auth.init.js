@@ -10,8 +10,7 @@ import UserModel from './models/user.model';
 const loginCallback = (accessToken, refreshToken, profile, done) => {
   const { displayName, id } = profile;
 
-  return UserModel.findOne({ fb_id: id })
-    .exec()
+  return UserModel.findOneAsync({ fb_id: id })
     .then(user => {
       if(!user){
         return UserModel.createAndSave({ fb_id: id, name: displayName, token: accessToken });
@@ -19,7 +18,7 @@ const loginCallback = (accessToken, refreshToken, profile, done) => {
 
       user.token = accessToken;
 
-      return user.save();
+      return user.saveAsync();
     })
     .then(user => done(null, user))
     .catch(err => done(err, null));
