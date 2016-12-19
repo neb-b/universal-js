@@ -12,6 +12,7 @@ import Event from '../../../../server/models/event.model';
 
 import db from '../helpers/db.init';
 import config from '../helpers/config';
+import usersTestData from './usersTestData';
 
 describe('UserController', () => {
   let controller;
@@ -142,8 +143,52 @@ describe('UserController', () => {
   });
 
   context('dashBoard', () => {
-    it('it returns all data from logged in user', () => {});
+    it('it returns all data from logged in user', (done) => {
+      let mockRequest = { user: { id: mockUser._id }};
+      let mockResponse = { send: td.function() };
+      let capture = td.matchers.captor();
 
-    it('handles errors', () => {});
+      td.replace(FB, 'getAsync');
+      td.when(FB.getAsync('me/accounts'))
+        .thenReturn(Promise.resolve(usersTestData.getDashboard.pages));
+
+      td.when(FB.getAsync(`1769754093273789/events`))
+        .thenReturn(Promise.resolve(usersTestData.getDashboard.events[0]))
+
+      td.when(FB.getAsync(`731033223716085/events`))
+        .thenReturn(Promise.resolve(usersTestData.getDashboard.events[1]))
+
+      td.when(mockResponse.send(capture.capture()))
+        .thenDo(() => {
+          expect(capture.value.pages).to.deep.equal(usersTestData.getDashboard.entity.pages);
+          expect(capture.value.user._id).to.deep.equal(mockUser._id);
+          expect(capture.value.user.name).to.deep.equal(mockUser.name);
+          done();
+        });
+
+      controller.getDashboard(mockRequest, mockResponse, _.noop);
+    });
+
+    it('handles errors', (done) => {
+      let mockError = new Error('test-error');
+      let mockRequest = { user: { id: mockUser._id }};
+      let mockNext = td.function();
+      let capture = td.matchers.captor();
+
+      td.replace(FB, 'getAsync');
+      td.when(FB.getAsync('me/accounts'))
+        .thenReturn(Promise.resolve(usersTestData.getDashboard.pages));
+
+      td.when(FB.getAsync(`1769754093273789/events`))
+        .thenReturn(Promise.resolve(usersTestData.getDashboard.events[0]))
+
+      td.when(FB.getAsync(`731033223716085/events`))
+        .thenReturn(Promise.reject(mockError))
+
+      td.when(mockNext(Boom.wrap(mockError)))
+        .thenDo(() => { done() });
+
+      controller.getDashboard(mockRequest, _.noop, mockNext);
+    });
   });
 });
