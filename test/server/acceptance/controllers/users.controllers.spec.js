@@ -60,8 +60,32 @@ describe('UserController', () => {
       controller.getUser(mockRequest, mockResponse, _.noop);
     });
 
-    it('returns populated user with club', () => {
+    it('returns populated user with club', (done) => {
+      let club = new Club({ name: 'test-club' });
+      let userWithClub = new User({ name: 'test-user' });
+      let mockClub;
+      let mockRequest = { user: { id: mockUser._id }};
+      let mockResponse = { send: td.function() };
+      let capture = td.matchers.captor();
 
+      td.when(mockResponse.send(capture.capture()))
+        .thenDo(() => {
+          expect(capture.value._id).to.deep.equal(mockUser._id);
+          expect(capture.value.name).to.equal(mockUser.name);
+          expect(capture.value.club._id).to.deep.equal(mockClub._id);
+          expect(capture.value.club.name).to.deep.equal(mockClub.name);
+          done()
+        });
+
+      club.saveAsync()
+        .then(dbClub => {
+          mockClub = dbClub;
+          mockUser.club = mockClub._id;
+          return mockUser.saveAsync()
+        })
+        .then(user => {
+          controller.getUser(mockRequest, mockResponse, _.noop);
+        })
     });
 
     it('handles errors', (done) => {
