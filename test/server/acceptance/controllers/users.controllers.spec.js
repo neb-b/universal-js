@@ -60,6 +60,10 @@ describe('UserController', () => {
       controller.getUser(mockRequest, mockResponse, _.noop);
     });
 
+    it('returns populated user with club', () => {
+
+    });
+
     it('handles errors', (done) => {
       let mockRequest = { user: { id: 'bad-id' }};
       let mockNext = td.function();
