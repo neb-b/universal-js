@@ -4,6 +4,7 @@ import Boom from 'boom';
 import FB from 'fbgraph';
 import mongoose from 'mongoose';
 import { expect } from 'chai';
+import Promise from 'bluebird';
 
 import UserController from '../../../../server/controllers/users.controller';
 import User from '../../../../server/models/user.model';
@@ -42,6 +43,11 @@ describe('UserController', () => {
         done();
       });
   });
+
+  after((done) => {
+    mongoose.disconnect();
+    done();
+  })
 
   context('getUser', () => {
     it('returns user back from serialized logged in user', (done) => {
@@ -182,6 +188,8 @@ describe('UserController', () => {
       td.when(FB.getAsync(`1769754093273789/events`))
         .thenReturn(Promise.resolve(usersTestData.getDashboard.events[0]))
 
+      // TODO (sprada): Investigate PromiseRejectionHandledWarning:
+      // Promise rejection was handled asynchronously
       td.when(FB.getAsync(`731033223716085/events`))
         .thenReturn(Promise.reject(mockError))
 
