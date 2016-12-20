@@ -31,24 +31,23 @@ UserController.prototype.updateUser = function updateUser(req, res, next) {
 };
 
 UserController.prototype.getDashboard = function getDashboard(req, res, next) {
+  let pages, user;
+
   return this.User.findById(req.user.id)
     .populate('club')
     .execAsync()
-    .then(user => {
+    .then(dbUser => {
+      user = dbUser;
       FB.setAccessToken(user.token);
-      return Promise.props({
-        user,
-        pages: FB.getAsync('me/accounts')
-      });
+
+      return FB.getAsync('me/accounts')
     })
-    .then(({ user, pages }) => {
-      return Promise.props({
-        user,
-        pages: pages.data,
-        events: Promise.all(_.map(pages.data, page => FB.getAsync(`${page.id}/events`)))
-      });
+    .then(fbPages => {
+      pages = fbPages.data;
+
+      return Promise.all(pages.map(page => FB.getAsync(`${page.id}/events`)))
     })
-    .then(({ user, pages, events }) => {
+    .then(events => {
       let entity = {
         user,
         pages: _.map(pages, (page, i) => _.assign({}, page, { events: events[i].data }))

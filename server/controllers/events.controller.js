@@ -45,7 +45,7 @@ EventController.prototype.updateEvent = function updateEvent(req, res, next) {
       }
 
       return Promise.all([
-        _.indexOf(club.events, req.params.id),
+        club.events.indexOf(req.params.id),
         club
       ]);
     })

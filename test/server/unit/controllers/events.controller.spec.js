@@ -5,7 +5,7 @@ import Promise from 'bluebird';
 
 import EventController from '../../../../server/controllers/events.controller';
 
-describe('UserController', () => {
+describe('EventController', () => {
   let controller;
 
   before(() => controller = new EventController());
