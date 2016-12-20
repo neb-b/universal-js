@@ -64,9 +64,6 @@ EventController.prototype.updateEvent = function updateEvent(req, res, next) {
 };
 
 EventController.prototype.getFBEvent = function getFBEvent(req, res, next) {
-  console.log(req.user.id);
-  console.log(req.user.id);
-  console.log(req.user.id);
   return this.User.findByIdAsync(req.user.id)
     .then(user => {
       FB.setAccessToken(user.token);
