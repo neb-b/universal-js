@@ -40,19 +40,20 @@ describe('ClubController', () => {
       });
   });
 
-  afterEach((done) => {
+  afterEach(() => {
     td.reset();
 
-    Club.removeAsync()
-      .then(() => {
-        done();
-      });
+    return Promise.all([
+      Club.removeAsync(),
+      User.removeAsync(),
+      Event.removeAsync()
+    ]);
   });
 
   after((done) => {
     mongoose.disconnect();
     done();
-  })
+  });
 
   context('getClub', () => {
     it('returns club by id with no events', (done) => {
@@ -84,7 +85,7 @@ describe('ClubController', () => {
           expect(capture.value.name).to.equal(mockClub.name);
           expect(capture.value.events[0]._id).to.deep.equal(mockEvent._id);
           expect(capture.value.events[0].name).to.deep.equal(mockEvent.name);
-          done()
+          done();
         });
 
       event.saveAsync()
