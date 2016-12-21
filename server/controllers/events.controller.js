@@ -68,8 +68,13 @@ EventController.prototype.getFBEvent = function getFBEvent(req, res, next) {
     .then(user => {
       FB.setAccessToken(user.token);
       
-      return FB.getAsync('me/accounts');
+      return Promise.props({
+        data: FB.getAsync(`${req.params.id}`),
+        cover: FB.getAsync(`${req.params.id}?fields=cover`)
+      });
     })
+    .then(info => res.send(info))
+    .catch(err => next(Boom.wrap(err)));
 };
 
 EventController.prototype.purchaseTicket = function purchaseTicket(req, res, next) {

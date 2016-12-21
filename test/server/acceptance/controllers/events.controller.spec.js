@@ -13,7 +13,7 @@ import EventController from '../../../../server/controllers/events.controller';
 
 import db from '../helpers/db.init';
 import config from '../helpers/config';
-import usersTestData from './usersTestData';
+import eventsTestData from './eventsTestData';
 
 describe('EventController', () => {
   let controller, mockUser, mockEvent, mockClub;
@@ -231,7 +231,50 @@ describe('EventController', () => {
     });
   });
 
-  context.skip('getFBEvent', () => {});
+  context('getFBEvent', () => {
+    it('gets event info', (done) => {
+      let mockRequest = { user: { id: mockUser._id }, params: { id: 'test-id' } };
+      let mockResponse = { send: td.function() };
+      let capture = td.matchers.captor();
+
+      td.replace(FB, 'getAsync');
+      td.when(FB.getAsync('test-id'))
+        .thenReturn(Promise.resolve(eventsTestData.getFBEvent.data));
+
+      td.when(FB.getAsync('test-id?fields=cover'))
+        .thenReturn(Promise.resolve(eventsTestData.getFBEvent.cover));
+
+      td.when(mockResponse.send(capture.capture()))
+        .thenDo(() => {
+          expect(capture.value).to.deep.equal(eventsTestData.getFBEvent);
+          done();
+        });
+
+      controller.getFBEvent(mockRequest, mockResponse, _.noop);
+    });
+
+    it('handles errors', (done) => {
+      let mockRequest = { user: { id: mockUser._id }, params: { id: 'bad-id' } };
+      let mockNext = td.function();
+      let mockError = new Error('test-error');
+      let capture = td.matchers.captor();
+
+      td.replace(FB, 'getAsync');
+      td.when(FB.getAsync('bad-id'))
+        .thenReturn(Promise.reject(mockError));
+
+      td.when(FB.getAsync('bad-id?fields=cover'))
+        .thenReturn(Promise.reject(mockError));
+
+      td.when(mockNext(capture.capture()))
+        .thenDo(() => {
+          expect(capture.value.isBoom).to.be.true;
+          done();
+        });
+
+      controller.getFBEvent(mockRequest, _.noop, mockNext);
+    });
+  });
 
   context.skip('purchaseTicket', () => {});
 });
