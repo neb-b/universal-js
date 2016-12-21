@@ -45,7 +45,7 @@ UserController.prototype.getDashboard = function getDashboard(req, res, next) {
     .then(fbPages => {
       pages = fbPages.data;
 
-      return Promise.all(pages.map(page => FB.getAsync(`${page.id}/events`)))
+      return Promise.all(_.map(pages, page => FB.getAsync(`${page.id}/events`)))
     })
     .then(events => {
       let entity = {

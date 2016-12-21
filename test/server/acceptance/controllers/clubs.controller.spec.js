@@ -23,6 +23,8 @@ describe('ClubController', () => {
     // Mongo instance
     db(config.mongoUrl);
 
+    td.config({ promiseConstructor: Promise });
+
     controller = new ClubController({ User, Club, Event });
     done();
   });

@@ -21,7 +21,9 @@ describe('UserController', () => {
   before((done) => {
     // Mongo instance
     db(config.mongoUrl);
-    
+
+    td.config({ promiseConstructor: Promise });
+
     controller = new UserController({ User, Club, Event });
     done();
   });
@@ -186,12 +188,12 @@ describe('UserController', () => {
         .thenReturn(Promise.resolve(usersTestData.getDashboard.pages));
 
       td.when(FB.getAsync(`1769754093273789/events`))
-        .thenReturn(Promise.resolve(usersTestData.getDashboard.events[0]))
+        .thenResolve(usersTestData.getDashboard.events[0])
 
       // TODO (sprada): Investigate PromiseRejectionHandledWarning:
       // Promise rejection was handled asynchronously
       td.when(FB.getAsync(`731033223716085/events`))
-        .thenReturn(Promise.reject(mockError))
+        .thenReject(mockError)
 
       td.when(mockNext(Boom.wrap(mockError)))
         .thenDo(() => { done() });

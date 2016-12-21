@@ -21,6 +21,8 @@ describe('EventController', () => {
     // Mongo instance
     db(config.mongoUrl);
 
+    td.config({ promiseConstructor: Promise });
+
     controller = new EventController({ User, Club, Event });
     done();
   });
@@ -239,10 +241,10 @@ describe('EventController', () => {
 
       td.replace(FB, 'getAsync');
       td.when(FB.getAsync('test-id'))
-        .thenReturn(Promise.resolve(eventsTestData.getFBEvent.data));
+        .thenResolve(eventsTestData.getFBEvent.data);
 
       td.when(FB.getAsync('test-id?fields=cover'))
-        .thenReturn(Promise.resolve(eventsTestData.getFBEvent.cover));
+        .thenResolve(eventsTestData.getFBEvent.cover);
 
       td.when(mockResponse.send(capture.capture()))
         .thenDo(() => {
@@ -261,10 +263,10 @@ describe('EventController', () => {
 
       td.replace(FB, 'getAsync');
       td.when(FB.getAsync('bad-id'))
-        .thenReturn(Promise.reject(mockError));
+        .thenReject(mockError);
 
       td.when(FB.getAsync('bad-id?fields=cover'))
-        .thenReturn(Promise.reject(mockError));
+        .thenReject(mockError);
 
       td.when(mockNext(capture.capture()))
         .thenDo(() => {
