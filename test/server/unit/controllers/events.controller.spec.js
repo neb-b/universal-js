@@ -2,6 +2,7 @@ import td from 'testdouble';
 import _ from 'lodash';
 import Boom from 'boom';
 import Promise from 'bluebird';
+import FB from 'fbgraph';
 
 import EventController from '../../../../server/controllers/events.controller';
 
@@ -216,10 +217,49 @@ describe('EventController', () => {
   });
 
   context('getFBEvent', () => {
+    it('gets event info', (done) => {
+      let mockRequest = { user: { id: 'test-user-id' }, params: { id: 'test-id' } };
+      let mockResponse = { send: td.function() };
+      let mockUser = { _id: 'test-user-id', club: 'test-club-id' };
 
+      controller.User = { findByIdAsync: td.function() };
+      td.when(controller.User.findByIdAsync('test-user-id'))
+        .thenReturn(Promise.resolve(mockUser));
+
+      td.replace(FB, 'getAsync');
+      td.when(FB.getAsync('test-id'))
+        .thenReturn(Promise.resolve('data'));
+
+      td.when(FB.getAsync('test-id?fields=cover'))
+        .thenReturn(Promise.resolve('cover'));
+
+      td.when(mockResponse.send({ data: 'data', cover: 'cover' }))
+        .thenDo(() => {
+          done();
+        });
+
+      controller.getFBEvent(mockRequest, mockResponse, _.noop);
+    });
+
+    it('handles errors', (done) => {
+      let mockRequest = { user: { id: 'bad-id' }, params: { id: 'bad-id' } };
+      let mockNext = td.function();
+      let mockError = new Error('test-error');
+
+      controller.User = { findByIdAsync: td.function() };
+      td.when(controller.User.findByIdAsync('bad-id'))
+        .thenReturn(Promise.reject(mockError));
+
+      td.when(mockNext(Boom.wrap(mockError)))
+        .thenDo(() => {
+          done();
+        });
+
+      controller.getFBEvent(mockRequest, _.noop, mockNext);
+    });
   });
 
-  context('purchaseTicket', () => {
+  context.skip('purchaseTicket', () => {
 
   });
 });
