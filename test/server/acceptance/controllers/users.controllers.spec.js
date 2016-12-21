@@ -158,13 +158,13 @@ describe('UserController', () => {
 
       td.replace(FB, 'getAsync');
       td.when(FB.getAsync('me/accounts'))
-        .thenReturn(Promise.resolve(usersTestData.getDashboard.pages));
+        .thenResolve(usersTestData.getDashboard.pages);
 
       td.when(FB.getAsync(`1769754093273789/events`))
-        .thenReturn(Promise.resolve(usersTestData.getDashboard.events[0]))
+        .thenResolve(usersTestData.getDashboard.events[0]);
 
       td.when(FB.getAsync(`731033223716085/events`))
-        .thenReturn(Promise.resolve(usersTestData.getDashboard.events[1]))
+        .thenResolve(usersTestData.getDashboard.events[1]);
 
       td.when(mockResponse.send(capture.capture()))
         .thenDo(() => {
@@ -185,15 +185,13 @@ describe('UserController', () => {
 
       td.replace(FB, 'getAsync');
       td.when(FB.getAsync('me/accounts'))
-        .thenReturn(Promise.resolve(usersTestData.getDashboard.pages));
+        .thenResolve(usersTestData.getDashboard.pages);
 
       td.when(FB.getAsync(`1769754093273789/events`))
-        .thenResolve(usersTestData.getDashboard.events[0])
+        .thenResolve(usersTestData.getDashboard.events[0]);
 
-      // TODO (sprada): Investigate PromiseRejectionHandledWarning:
-      // Promise rejection was handled asynchronously
       td.when(FB.getAsync(`731033223716085/events`))
-        .thenReject(mockError)
+        .thenReject(mockError);
 
       td.when(mockNext(Boom.wrap(mockError)))
         .thenDo(() => { done() });
