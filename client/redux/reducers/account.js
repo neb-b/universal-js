@@ -5,7 +5,10 @@ import {
 } from '../constants'
 
 const initialState = {
-  account: {},
+  account: {
+    name: '',
+    club: {}
+  },
   loading: false,
   error: null
 }

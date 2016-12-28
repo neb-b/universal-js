@@ -11,17 +11,16 @@ const redial = {
   fetch: ({ dispatch, params: { id } }) => dispatch(loadFbEvent(id))
 }
 
-const mapStateToProps = (state) => ({
-  dashboard: state.dashboard
-})
+const mapStateToProps = (state) => ({...state.newEvent})
 
 const NewEventPage = (props) => {
-  const { createEvent } = props
+  console.log('render new event', props)
+  const { createEvent, fbEvent } = props
   return (
     <div className={css(styles.root)}>
       <Helmet title='New Event' />
       <h2 className={css(styles.title)}>New Event</h2>
-      <NewEvent createEvent={createEvent} />
+      <NewEvent createEvent={createEvent} {...fbEvent} />
     </div>
   )
 }

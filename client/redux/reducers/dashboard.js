@@ -12,7 +12,8 @@ const initialState = {
       club: {
         events: []
       }
-    }
+    },
+    pages: []
   }
 }
 

@@ -3,20 +3,27 @@ import { Link } from 'react-router'
 import { Field } from 'redux-form'
 import { css, StyleSheet } from 'aphrodite'
 
-const NewEvent = ({ handleSubmit }) => (
-  <form onSubmit={handleSubmit}>
-    <div className={css(styles.inputWrapper)}>
-      <label className={css(styles.label)} htmlFor='name'>Event Name</label>
-      <Field name='name' component='input' type='text' />
-    </div>
-    <button className={css(styles.button)}>
-      Create Event
-    </button>
-    <div className={css(styles.noLink)}>
-      <Link to='/account/dashboard'>Cancel</Link>
-    </div>
-  </form>
-)
+const NewEvent = (props) => {
+  const { handleSubmit } = props
+  return (
+    <form onSubmit={handleSubmit}>
+      <div className={css(styles.inputWrapper)}>
+        <label className={css(styles.label)} htmlFor='name'>Name</label>
+        <Field name='name' component='input' type='text' />
+      </div>
+      <div className={css(styles.inputWrapper)}>
+        <label className={css(styles.label)} htmlFor='description'>Description</label>
+        <Field name='description' component='input' type='text' />
+      </div>
+      <button className={css(styles.button)}>
+        Create Event
+      </button>
+      <div className={css(styles.noLink)}>
+        <Link to='/account/dashboard'>Cancel</Link>
+      </div>
+    </form>
+  )
+}
 
 const styles = StyleSheet.create({
   noLink: {
