@@ -1,10 +1,10 @@
 import { shallow } from 'enzyme'
 import { expect } from 'chai'
-import App from '../../../common/components/app'
+import Event from '../../../../common/components/event'
 
-describe('<App />', () => {
+describe('<Event />', () => {
   it('renders', () => {
-    const wrapper = shallow(<App />)
+    const wrapper = shallow(<Event />)
     expect(wrapper).to.have.length(1)
   })
 });

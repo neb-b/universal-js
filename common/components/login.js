@@ -5,7 +5,7 @@ const Login = () => (
   <div className={css(styles.login)}>
     <a
       href='/api/users/login'
-      className={css(styles.button, styles.facebook)}>
+      className={`login-button ${css(styles.button, styles.facebook)}`}>
       Login with Facebook
     </a>
     <div className={css(styles.info)}>
