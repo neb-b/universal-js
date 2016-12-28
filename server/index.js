@@ -22,9 +22,9 @@ import webpackHotMiddleware from 'webpack-hot-middleware'
 import DefaultServerConfig from './config'
 import webpackConfig from '../tools/webpack.client.dev'
 import { compileDev, startDev } from '../tools/dx'
-import { configureStore } from '../common/store'
-import reducer from '../common/createReducer'
-import createRoutes from '../common/routes/root'
+import { configureStore } from '../client/store'
+import reducer from '../client/createReducer'
+import createRoutes from '../client/routes/root'
 import Routing from './routes'
 
 import db from './db.init';
@@ -218,7 +218,7 @@ export const startServer = (serverConfig) => {
       startDev(config.port, err)
     }
   })
-} 
+}
 
 if (require.main === module) {
   throng({
