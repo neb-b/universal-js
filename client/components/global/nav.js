@@ -33,7 +33,7 @@ const Nav = () => {
             Hello {name}</span>,
           <a
             key={2}
-            href='logout'
+            href='/logout'
             className={css(styles.link)}>
               Logout
           </a>
