@@ -10,7 +10,7 @@ const Events = (props) => {
       <h2>Future events</h2>
       {
         events.length
-        ? events.map((event) => <Event event={event} />)
+        ? events.map((event) => <Event key={event} event={event} />)
         : <p>You do not have any created events</p>
       }
     </div>

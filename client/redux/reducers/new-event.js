@@ -8,7 +8,7 @@ import {
 } from '../constants'
 
 const initialState = {
-  data: [],
+  fbEvent: {},
   loading: false,
   error: null
 }
@@ -21,7 +21,7 @@ export default function newEvent (state = initialState, action) {
         error: null}
     case LOAD_FB_EVENT_SUCCESS:
       return { ...state,
-        data: action.payload,
+        fbEvent: action.payload,
         loading: false}
     case LOAD_FB_EVENT_ERROR:
       return { ...state,

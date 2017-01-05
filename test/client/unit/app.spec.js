@@ -1,6 +1,6 @@
 import { shallow } from 'enzyme'
 import { expect } from 'chai'
-import App from '../../../common/components/app'
+import App from '../../../client/components/app'
 
 describe('<App />', () => {
   it('renders', () => {

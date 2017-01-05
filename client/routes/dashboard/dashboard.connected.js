@@ -11,9 +11,7 @@ const redial = {
   fetch: ({ dispatch }) => dispatch(loadDashboard())
 }
 
-const mapStateToProps = (state) => ({
-  dashboard: state.dashboard
-})
+const mapStateToProps = (state) => ({ dashboard: state.dashboard })
 
 const DashboardPage = (props) => {
   const { dashboard, location: { query } } = props
