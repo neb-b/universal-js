@@ -7,11 +7,6 @@ import { StyleSheet, css } from 'aphrodite'
 const Nav = () => {
   const loggedIn = cookie.load('loggedin')
 
-  let name
-  if (loggedIn) {
-    name = cookie.load('user')
-  }
-
   return (
     <div>
       <IndexLink to='/'
@@ -26,18 +21,12 @@ const Nav = () => {
       </Link>
       {
         loggedIn
-        ? [
-          <span
-            key={1}
-            className={css(styles.activeLink, styles.greeting)}>
-            Hello {name}</span>,
-          <a
-            key={2}
-            href='/logout'
-            className={css(styles.link)}>
-              Logout
+        ? <a
+          key={2}
+          href='/logout'
+          className={css(styles.link)}>
+            Logout
           </a>
-        ]
         : <Link
           to='/login'
           className={css(styles.link)}
