@@ -20,7 +20,6 @@ export default function createRoutes (store) {
         ])
       })
     },
-
     indexRoute: {
       component: Home
     }
