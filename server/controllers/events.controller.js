@@ -18,6 +18,13 @@ class EventController {
       .catch(err => next(Boom.wrap(err)));
   };
 
+  getEvents(req, res, next) {
+    return this.User.findByIdAsync(req.user.id)
+      .then(user => this.Club.findById(user.club).populate('events').execAsync()
+      .then(club => res.send(club))
+      .catch(err => next(Boom.wrap(err)));
+  };
+
   createEvent(req, res, next) {
     return this.User.findByIdAsync(req.user.id)
       .then(user => this.Club.findByIdAsync(user.club))
