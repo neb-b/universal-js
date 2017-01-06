@@ -20,7 +20,7 @@ class EventController {
 
   getEvents(req, res, next) {
     return this.User.findByIdAsync(req.user.id)
-      .then(user => this.Club.findById(user.club).populate('events').execAsync()
+      .then(user => this.Club.findById(user.club).populate('events').execAsync())
       .then(club => res.send(club))
       .catch(err => next(Boom.wrap(err)));
   };
